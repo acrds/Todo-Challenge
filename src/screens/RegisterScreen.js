@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { TextInput, Button, Text, useTheme, Icon } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { registerUser } from "../services/auth";
 
 export default function RegisterScreen() {
     const theme = useTheme();
@@ -23,11 +24,21 @@ export default function RegisterScreen() {
         setIsFormValid(isValid);
     }, [name, email, password, confirmPassword])
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         if (isFormValid) {
-            navigation.navigate('Login')
+          try {
+            const data = { name, email, password };
+            await registerUser(data); 
+            alert("Register Successfully");
+            navigation.navigate("Login"); 
+          } catch (error) {
+            alert("Error to register. Try again.");
+          }
+        } else {
+          alert("Please, fill correctly");
         }
-    }
+      };
+    
 
     return (
         <View style={styles.container}>
@@ -57,7 +68,7 @@ export default function RegisterScreen() {
                 mode="outlined"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
+                secureTextEntry={true}
                 style={styles.input}
             />
 
@@ -66,7 +77,7 @@ export default function RegisterScreen() {
                 mode="outlined"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                secureTextEntry
+                secureTextEntry={true}
                 style={styles.input}
             />
 
