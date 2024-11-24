@@ -18,3 +18,7 @@ Create configuration file: eas build:configure
       "ios": {"simulator":"true"}
     },
 ```
+- `npm install react-native-paper`
+- `npm i react-native-safe-area-context`
+- `npm install react-native-vector-icons`
+- `npm i @react-navigation/native-stack`
