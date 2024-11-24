@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { TextInput, Button, Text, useTheme, Icon } from "react-native-paper";
+import { TextInput, Button, useTheme, Icon } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../services/auth";
 
@@ -85,7 +85,7 @@ export default function RegisterScreen() {
                 mode="contained"
                 onPress={handleRegister}
                 disabled={!isFormValid}
-                style={[styles.button, { backgroundColor: isFormValid ? "#34A853" : theme.colors.disabled}]}
+                style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled}]}
             >
                 Register
             </Button>

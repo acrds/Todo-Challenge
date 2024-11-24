@@ -72,7 +72,7 @@ export default function LoginScreen() {
                 mode="contained"
                 onPress={handleLogin}
                 disabled={!isFormValid}
-                style={[styles.button, { backgroundColor: isFormValid ? "#34A853": theme.colors.disabled}]}
+                style={[styles.button, { backgroundColor: isFormValid ? "#004aad": theme.colors.disabled}]}
             >
                 Sign in
             </Button>

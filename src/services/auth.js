@@ -26,9 +26,22 @@ export const loginUser = async (data) => {
 export const listProjects = async () => {
     try {
       const response = await api.get("projects");
-      return response.data;
+      return response.data?.projects;
     } catch (error) {
       console.error("Error in list all projects:", error);
       throw error;
     }
+};
+
+//Create a project
+export const createProject = async (data) => {
+  try {
+    console.log("ddddd: ", data)
+    const response = await api.post("projects", data);
+    console.log("response", response)
+    return response.data;
+  } catch (error) {
+    console.error("Error in create a project:", error);
+    throw error;
+  }
 };

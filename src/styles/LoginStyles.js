@@ -9,9 +9,8 @@ export default styles = StyleSheet.create({
       paddingHorizontal: 16,
     },
     logo: {
-      width: 200,
-      height: 200,
-      marginBottom: 24,
+      width: 280,
+      height: 280,
     },
     input: {
       width: '100%',
