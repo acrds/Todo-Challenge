@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/LoginStyles';
 import { View, Image } from 'react-native';
 import { Button, useTheme, TextInput, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from '../services/auth';
+import { saveToken } from "../utils/tokenStorage";
 
 export default function LoginScreen() {
     const navigation = useNavigation();
@@ -11,12 +12,22 @@ export default function LoginScreen() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    useEffect(() => {
+        const isValid =
+            email.includes("@") &&
+            password.length >= 6;
+
+        setIsFormValid(isValid);
+    }, [email, password])
 
     const handleLogin = async () => {
         try {
             const data = { email, password };
-            const result = await loginUser(data);
-            console.log("resultado do pedro: ", result)
+            const response = await loginUser(data);
+            const { token } = response; 
+            await saveToken(token); 
             navigation.navigate("Home"); 
         } catch (error) {
             if (error.status === 400){
@@ -28,8 +39,7 @@ export default function LoginScreen() {
             }else {
                 alert(error.message);
             }
-            
-        }
+        } 
       };
     
 
@@ -61,8 +71,8 @@ export default function LoginScreen() {
             <Button
                 mode="contained"
                 onPress={handleLogin}
-                style={styles.button}
-                buttonColor="#34A853"
+                disabled={!isFormValid}
+                style={[styles.button, { backgroundColor: isFormValid ? "#34A853": theme.colors.disabled}]}
             >
                 Sign in
             </Button>
