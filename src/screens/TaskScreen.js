@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Paragraph } from 'react-native-paper';
 import styles from '../styles/TaskStyles';
-import { listTaskAproject } from '../services/auth';
-import { useRoute } from '@react-navigation/native';
-import { createTask } from '../services/auth';
-
+import { listTaskAproject, generateDescriptionNewTask, createTask } from '../services/auth';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function TaskScreen() {
     const route = useRoute();
     const theme = useTheme();
+    const navigation = useNavigation();
     const { project } = route.params;
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -70,34 +69,80 @@ export default function TaskScreen() {
                 alert("Error. Try later");
             } else if (error.status === 404) {
                 alert("User not found");
-            } else if (error.status === 201) {
-                alert("Task created successfully");
             } else if (error.status === 400) {
                 alert("Fields are required");
             } else {
                 alert(error.message);
             }
         } finally {
+            setNewTitle('');
+            setNewDescription('');
             setModalVisible(false);
         }
     };
 
-    const generate = () => {
-        console.log("caga")
+    const generateDescription = async () => {
+        try {
+            if (newTitle.trim() && project?.id) {
+                const newTask = {
+                    taskName: newTitle,
+                    taskDescription: newDescription,
+                    projectId: project?.id
+                };
+                const description = await generateDescriptionNewTask(newTask);
+                setNewDescription(description);
+                alert("Description generated successfully");
+            }
+        } catch (error) {
+            if (error.status === 500) {
+                alert("Error. Try later");
+            } else if (error.status === 404) {
+                alert("User not found");
+            } else if (error.status === 200) {
+                alert("Description generated successfully");
+            } else if (error.status === 400) {
+                alert("Title is required");
+            } else {
+                alert(error.message);
+            }
+        }
     };
+
+    function iconStatus(element) {
+        let icon = '';
+        if (element === 'to-do') {
+            icon = 'circle'
+        } else if (element === "doing") {
+            icon = 'circle-slice-5'
+        } else if (element === 'done') {
+            icon = 'circle-slice-8'
+        } else {
+            icon = 'pause-circle'
+        }
+        return icon
+    }
+
 
     function formatDate(dateString) {
         const date = new Date(dateString);
         const offset = -3;
         const adjustedDate = new Date(date.getTime() + offset * 60 * 60 * 1000);
         const day = String(adjustedDate.getUTCDate()).padStart(2, '0');
-        const month = String(adjustedDate.getUTCMonth() + 1).padStart(2, '0'); 
+        const month = String(adjustedDate.getUTCMonth() + 1).padStart(2, '0');
         const year = adjustedDate.getUTCFullYear();
         const hours = String(adjustedDate.getUTCHours()).padStart(2, '0');
         const minutes = String(adjustedDate.getUTCMinutes()).padStart(2, '0');
-    
+
         return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
     }
+    // console.log("taskkkkksss: ", tasks)
+    // const filteredTasks = tasks.filter(task => {
+    //     console.log("task: ", task)
+    //     selectedStatuses.includes(task?.currentstate?.state.name)
+    // });
+
+    // console.log("filtros: ",filteredTasks)
+
 
     return (
         <View style={styles.container}>
@@ -109,42 +154,50 @@ export default function TaskScreen() {
                 />
             ) : (
                 <>
-                    <Title style={styles.header}>Your Tasks {tasks?.length ? `(${tasks?.length})` : "(0)"}</Title>
-                    <SegmentedButtons
-                        value={selectedStatuses}
-                        onValueChange={setSelectedStatuses}
-                        buttons={[
-                            { value: 'To Do', label: 'TO DO', icon: 'check' },
-                            { value: 'Doing', label: 'DOING', icon: 'check' },
-                            { value: 'Done', label: 'DONE', icon: 'check' },
-                        ]}
-                        multiSelect
-                    />
-                    {emptyTaskList ? (
-                        <View style={styles.div}>
-                            <Image
-                                source={require('../../assets/taskempty.png')}
-                                style={styles.logo}
-                                resizeMode="contain"
-                            />
-                            <Title style={styles.noTasksText}>No task yet.</Title>
-                        </View>
-                    ) : (
-                        tasks?.map(task => (
+                    <ScrollView contentContainerStyle={styles.scrollContent}>
+                        <Title style={styles.header}>Your Tasks {tasks?.length ? `(${tasks?.length})` : "(0)"}</Title>
+                        {/* <SegmentedButtons
+                            value={selectedStatuses}
+                            onValueChange={value => {
+                                if (selectedStatuses.includes(value)){
+                                    setSelectedStatuses(selectedStatuses.filter(status => status !== value));
+                                }else {
+                                    setSelectedStatuses([...selectedStatuses, value]);
+                                }
+                            }}
+                            buttons={[
+                                { value: 'To Do', label: 'TO DO', icon: 'circle' },
+                                { value: 'Doing', label: 'DOING', icon: 'circle-slice-5' },
+                                { value: 'Done', label: 'DONE', icon: 'circle-slice-8' },
+                            ]}
+                            multiSelect
+                        /> */}
+                        {emptyTaskList ? (
+                            <View style={styles.div}>
+                                <Image
+                                    source={require('../../assets/taskempty.png')}
+                                    style={styles.logo}
+                                    resizeMode="contain"
+                                />
+                                <Title style={styles.noTasksText}>No task yet.</Title>
+                            </View>
+                        ) : (
+                            tasks?.map(task => (
+                                <Card onPress={() => navigation.navigate('TaskDetail', { task: task, project: project })} key={task.id} style={styles.card}>
+                                    <Card.Content>
+                                        <View style={styles.cardHeader}>
+                                            <IconButton icon={iconStatus(task?.currentState?.state?.slug)} iconColor={task?.currentState?.state?.color} size={24} />
+                                            <Title style={styles.titleTask}>{task.name}</Title>
+                                        </View>
+                                        <Paragraph>Created at: {formatDate(task.createdAt)}</Paragraph>
+                                        <Paragraph>Updated at: {formatDate(task.updatedAt)}</Paragraph>
+                                        <Paragraph>Status: {task?.currentState?.state?.name}</Paragraph>
+                                    </Card.Content>
+                                </Card>
 
-                            <Card onPress={() => console.log("oi")} key={task.id} style={styles.card}>
-                            <Card.Content>
-                                <View style={styles.cardHeader}>
-                                    <Title style={styles.titleTask}>{task.name}</Title>
-                                    <IconButton icon="calendar" size={24} />
-                                </View>
-                                <Paragraph>Created at: {formatDate(task.createdAt)}</Paragraph>
-                                <Paragraph>Updated at: {formatDate(task.updatedAt)}</Paragraph>
-                            </Card.Content>
-                        </Card>
-
-                        ))
-                    )}
+                            ))
+                        )}
+                    </ScrollView>
                     <FAB
                         style={[styles.fab, { backgroundColor: '#004aad' }]}
                         icon="plus"
@@ -176,7 +229,7 @@ export default function TaskScreen() {
                                 multiline
                             />
                             <View style={styles.containerButton}>
-                                <Button icon='robot' mode="contained" disabled={!hasTitle} onPress={generate} style={[styles.generateButton, { backgroundColor: hasTitle ? "#1573ef" : theme.colors.disabled }]}>
+                                <Button icon='robot' mode="contained" disabled={!hasTitle} onPress={generateDescription} style={[styles.generateButton, { backgroundColor: hasTitle ? "#1573ef" : theme.colors.disabled }]}>
                                     Generate with AI
                                 </Button>
                                 <Button mode="contained" disabled={!isFormValid} onPress={addNewTask} style={[styles.createButton, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}>

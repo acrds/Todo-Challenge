@@ -65,3 +65,60 @@ export const createTask = async (data) => {
     throw error;
   }
 };
+
+//Generate description
+export const generateDescriptionNewTask = async (data) => {
+  try {
+    const response = await api.post("tasks/gen-description", data);
+    return response.data?.description;
+  } catch (error) {
+    console.error("Error in generate task new description:", error);
+    throw error;
+  }
+};
+
+//Create comment
+export const createComment = async (data) => {
+  try {
+    const response = await api.post("comments", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in create a comment:", error);
+    throw error;
+  }
+};
+
+//Edit comment
+export const updateComment = async (data, taskId) => {
+  try {
+    const response = await api.put(`comments/${taskId}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in update a comment:", error);
+    throw error;
+  }
+};
+
+//Delete comment
+export const deleteComment = async (taskId) => {
+  try {
+    const response = await api.delete(`comments/${taskId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in delete a comment:", error);
+    throw error;
+  }
+};
+
+//Update status of a task
+export const updateStatus = async (data) => {
+  try {
+    console.log("apii: ", data)
+    const response = await api.post("taskstates", data);
+    console.log("repsonse: ", response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Error in update status:", error);
+    throw error;
+  }
+};

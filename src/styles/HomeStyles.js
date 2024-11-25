@@ -9,6 +9,10 @@ export default styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingBottom: 80,
     },
+    loadingIndicator: {
+        marginTop: 50,
+        alignSelf: "center",
+    },
     title: {
         fontSize: 24,
         fontWeight: "bold",

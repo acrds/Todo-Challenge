@@ -8,6 +8,10 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
     },
+    icon:{
+        marginLeft: 9,
+        paddingLeft: 29
+    },
     content: {
         flex: 1,
         justifyContent: "center",

@@ -65,6 +65,8 @@ export default function HomeScreen() {
                 alert(error.message);
             }
         } finally {
+            setNewTitle('');
+            setNewDescription('');
             setModalVisible(false);
         }
     };

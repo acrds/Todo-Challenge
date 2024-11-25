@@ -26,26 +26,29 @@ export default function RegisterScreen() {
 
     const handleRegister = async () => {
         if (isFormValid) {
-          try {
-            const data = { name, email, password };
-            await registerUser(data); 
-            alert("Register Successfully");
-            navigation.navigate("Login"); 
-          } catch (error) {
-            alert("Error to register. Try again.");
-          }
+            try {
+                const data = { name, email, password };
+                await registerUser(data);
+                alert("Register Successfully");
+                navigation.navigate("Login");
+            } catch (error) {
+                alert("Error to register. Try again.");
+            }
         } else {
-          alert("Please, fill correctly");
+            alert("Please, fill correctly");
         }
-      };
-    
+    };
+
 
     return (
         <View style={styles.container}>
-            <Icon
-                source="account"
-                size={90}
-            />
+            <View style={styles.icon}>
+                <Icon
+                    source="account"
+                    size={90}
+                />
+            </View>
+
             <TextInput
                 label="Name*"
                 mode="outlined"
@@ -85,7 +88,7 @@ export default function RegisterScreen() {
                 mode="contained"
                 onPress={handleRegister}
                 disabled={!isFormValid}
-                style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled}]}
+                style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}
             >
                 Register
             </Button>
