@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { createComment, listTaskAproject, updateStatus} from '../services/auth';
+import { createComment, listTaskAproject, updateStatus } from '../services/auth';
 import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Divider, Paragraph, ActivityIndicator } from "react-native-paper";
 import styles from '../styles/TaskDetailStyles';
 
@@ -56,7 +56,7 @@ export default function TaskDetailScreen() {
     const handleStatusChange = async (statusId) => {
         try {
             setLoading(true);
-            await updateStatus({ taskId: task.id, stateId: statusId});
+            await updateStatus({ taskId: task.id, stateId: statusId });
             const fetchTask = await getAllTasks();
             setTask(fetchTask);
             const updatedStatus = status.find((st) => statusId === st.id);
@@ -119,9 +119,8 @@ export default function TaskDetailScreen() {
                             resizeMode="contain"
                         />
                         <Button icon="chevron-down" mode="contained" onPress={openMenu} >
-                            Change status
+                            {task?.currentState?.state?.name}
                         </Button>
-
                         <Menu
                             visible={visible}
                             onDismiss={closeMenu}
@@ -134,13 +133,12 @@ export default function TaskDetailScreen() {
                             {status.map((status) => (
                                 <Menu.Item
                                     key={status.id}
-                                    onPress={() => {console.log(status);handleStatusChange(status.id)}}
+                                    onPress={() => { console.log(status); handleStatusChange(status.id) }}
                                     title={status.name}
-                                    disabled={status.id === task?.currentState?.state?.id} 
+                                    disabled={status.id === task?.currentState?.state?.id}
                                 />
                             ))}
                         </Menu>
-
                     </View>
                     <Title style={styles.titleTask}>{task.name}</Title>
                     <Card>

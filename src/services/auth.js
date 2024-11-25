@@ -113,9 +113,7 @@ export const deleteComment = async (taskId) => {
 //Update status of a task
 export const updateStatus = async (data) => {
   try {
-    console.log("apii: ", data)
     const response = await api.post("taskstates", data);
-    console.log("repsonse: ", response.data)
     return response.data;
   } catch (error) {
     console.error("Error in update status:", error);

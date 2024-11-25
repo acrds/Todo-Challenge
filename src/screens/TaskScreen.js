@@ -13,6 +13,7 @@ export default function TaskScreen() {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedStatuses, setSelectedStatuses] = useState(['To Do', 'Doing', 'Done']);
+    const [filteredTasks, setFilteredTasks] = useState(tasks);
     const [modalVisible, setModalVisible] = useState(false);
     const [newTitle, setNewTitle] = useState("");
     const [newDescription, setNewDescription] = useState("");
@@ -30,6 +31,13 @@ export default function TaskScreen() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const filteredTasks_ = tasks.filter(task =>
+            selectedStatuses.includes(task.currentState.state.name)
+        );
+        setFilteredTasks(filteredTasks_);
+    }, [tasks, selectedStatuses]);
 
     useEffect(() => {
         getAllTasks();
@@ -135,14 +143,13 @@ export default function TaskScreen() {
 
         return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
     }
-    // console.log("taskkkkksss: ", tasks)
-    // const filteredTasks = tasks.filter(task => {
-    //     console.log("task: ", task)
-    //     selectedStatuses.includes(task?.currentstate?.state.name)
-    // });
 
-    // console.log("filtros: ",filteredTasks)
-
+    function onUpdateFilter(selectedStatusList) {
+        const filteredTasks_ = tasks.filter(task => {
+            return selectedStatusList.includes(task.currentState.state.name)
+        })
+        setFilteredTasks( filteredTasks_ )
+    }
 
     return (
         <View style={styles.container}>
@@ -156,14 +163,11 @@ export default function TaskScreen() {
                 <>
                     <ScrollView contentContainerStyle={styles.scrollContent}>
                         <Title style={styles.header}>Your Tasks {tasks?.length ? `(${tasks?.length})` : "(0)"}</Title>
-                        {/* <SegmentedButtons
+                        <SegmentedButtons
                             value={selectedStatuses}
-                            onValueChange={value => {
-                                if (selectedStatuses.includes(value)){
-                                    setSelectedStatuses(selectedStatuses.filter(status => status !== value));
-                                }else {
-                                    setSelectedStatuses([...selectedStatuses, value]);
-                                }
+                            onValueChange={(selectedStatusList) => {
+                                setSelectedStatuses(selectedStatusList);
+                                onUpdateFilter(selectedStatusList)
                             }}
                             buttons={[
                                 { value: 'To Do', label: 'TO DO', icon: 'circle' },
@@ -171,7 +175,7 @@ export default function TaskScreen() {
                                 { value: 'Done', label: 'DONE', icon: 'circle-slice-8' },
                             ]}
                             multiSelect
-                        /> */}
+                        />
                         {emptyTaskList ? (
                             <View style={styles.div}>
                                 <Image
@@ -182,7 +186,7 @@ export default function TaskScreen() {
                                 <Title style={styles.noTasksText}>No task yet.</Title>
                             </View>
                         ) : (
-                            tasks?.map(task => (
+                            filteredTasks?.map(task => (
                                 <Card onPress={() => navigation.navigate('TaskDetail', { task: task, project: project })} key={task.id} style={styles.card}>
                                     <Card.Content>
                                         <View style={styles.cardHeader}>
