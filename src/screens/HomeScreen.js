@@ -36,9 +36,9 @@ export default function HomeScreen() {
         setIsFormValid(isValid);
     }, [newTitle, newDescription]);
 
-    useEffect(() => {
+    useEffect(()=>{
         getAllProjects();
-    }, []);
+    }, [])
 
     const addNewProject = async () => {
         try {
@@ -48,7 +48,9 @@ export default function HomeScreen() {
                     description: newDescription,
                 };
                 await createProject(newProject);
-                setProjects([...projects, newProject]);
+                await getAllProjects();
+                alert("Project created successfully");
+
             }
         } catch (error) {
             if (error.status === 500) {
@@ -67,7 +69,7 @@ export default function HomeScreen() {
         }
     };
 
-    var emptyProjectList = projects.length == 0;
+    var emptyProjectList = projects?.length == 0;
 
     return (
         <View style={styles.container}>
@@ -80,7 +82,7 @@ export default function HomeScreen() {
                 />
             ) : (
                 <ScrollView contentContainerStyle={styles.scrollContent}>
-                    <Title style={styles.title}>Your Projects</Title>
+                    <Title style={styles.title}>Your Projects {projects?.length ? `(${projects?.length})` : "(0)"}</Title>
 
                     {emptyProjectList ? (
                         <>

@@ -54,3 +54,14 @@ export const listTaskAproject = async (projectId) => {
     throw error;
   }
 };
+
+//Create a task
+export const createTask = async (data) => {
+  try {
+    const response = await api.post("tasks", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in create a task:", error);
+    throw error;
+  }
+};
