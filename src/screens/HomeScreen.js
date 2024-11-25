@@ -96,7 +96,7 @@ export default function HomeScreen() {
                         </>
                     ) : (
                         projects?.map((project) => (
-                            <Card key={project.id} style={styles.card}>
+                            <Card onPress={() => navigation.navigate('Task', { project: project })} key={project.id} style={styles.card}>
                                 <Card.Content>
                                     <View style={styles.cardHeader}>
                                         <Title style={styles.titleProject}>{project.name}</Title>

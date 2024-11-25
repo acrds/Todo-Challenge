@@ -36,12 +36,21 @@ export const listProjects = async () => {
 //Create a project
 export const createProject = async (data) => {
   try {
-    console.log("ddddd: ", data)
     const response = await api.post("projects", data);
-    console.log("response", response)
     return response.data;
   } catch (error) {
     console.error("Error in create a project:", error);
+    throw error;
+  }
+};
+
+//List all tasks of a project
+export const listTaskAproject = async (projectId) => {
+  try {
+    const response = await api.get(`tasks/project/${projectId}`);
+    return response.data?.tasks;
+  } catch (error) {
+    console.error("Error in get all tasks of a project:", error);
     throw error;
   }
 };
