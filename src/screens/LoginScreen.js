@@ -57,7 +57,7 @@ export default function LoginScreen() {
                 value={email}
                 onChangeText={setEmail}
                 style={styles.input}
-                keyboardType="numeric"
+                keyboardType="email-address"
             />
 
             <TextInput
