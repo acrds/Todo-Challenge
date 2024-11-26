@@ -184,7 +184,7 @@ export default function TaskScreen() {
                                 onUpdateFilter(selectedStatusList)
                             }}
                             buttons={[
-                                { value: 'To Do', label: 'TO DO', icon: 'circle' },
+                                { value: 'To Do', label: 'TO DO', icon: 'circle-outline' },
                                 { value: 'Doing', label: 'DOING', icon: 'circle-slice-5'},
                                 { value: 'Done', label: 'DONE', icon: 'circle-slice-8'},
                             ]}
@@ -193,7 +193,7 @@ export default function TaskScreen() {
                         {emptyTaskList ? (
                             <View style={styles.div}>
                                 <Image
-                                    source={require('../../assets/taskempty.png')}
+                                    source={require('../../assets/notask.png')}
                                     style={styles.logo}
                                     resizeMode="contain"
                                 />
@@ -258,7 +258,7 @@ export default function TaskScreen() {
                         </Modal>
                     </Portal>
                 </>
-            )};
+            )}
         </View>
     )
 };

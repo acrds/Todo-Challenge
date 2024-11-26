@@ -29,10 +29,11 @@ export default styles = StyleSheet.create({
         paddingLeft: 12
     },
     titleTask: {
-        fontWeight: 700,
+        fontWeight: 'bold',
         fontSize: 22,
         marginVertical: 20,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: "#004aad",
     },
     div: {
         marginLeft: 50,
@@ -92,6 +93,9 @@ export default styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
         marginTop: 18
+    },
+    desc: {
+        fontSize: 12
     }
 
 });

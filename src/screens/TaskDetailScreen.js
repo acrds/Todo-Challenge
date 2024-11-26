@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { createComment, deleteComment, listTaskAproject, updateComment, updateStatus } from '../services/auth';
 import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Dialog, Paragraph, ActivityIndicator } from "react-native-paper";
 import styles from '../styles/TaskDetailStyles';
+import Markdown from 'react-native-markdown-display';
 
 export default function TaskDetailScreen() {
     const theme = useTheme();
@@ -81,7 +82,6 @@ export default function TaskDetailScreen() {
             setTask(fetchTask);
             alert('Comment deleted successfully');
         } catch (error) {
-            console.log("erro function: ", JSON.stringify(error))
             if (error.status === 500) {
                 alert("Error internal. Try later");
             } else if (error.status === 401) {
@@ -101,7 +101,7 @@ export default function TaskDetailScreen() {
     const handleUpdateComment = async () => {
         try {
             setLoading(true);
-            await updateComment({ text: selectedComment}, selectedId );
+            await updateComment({ text: selectedComment }, selectedId);
             const fetchTask = await getAllTasks();
             setTask(fetchTask);
             alert('Comment updated successfully');
@@ -168,7 +168,7 @@ export default function TaskDetailScreen() {
                     <Title style={styles.titleTask}>{task.name}</Title>
                     <View style={styles.cardHeader}>
                         <Image
-                            source={require('../../assets/task-list.png')}
+                            source={require('../../assets/task.png')}
                             style={styles.logo}
                             resizeMode="contain"
                         />
@@ -197,7 +197,9 @@ export default function TaskDetailScreen() {
                     <Card>
                         <Text style={styles.subtitle}>Description:</Text>
                         <Card.Content>
-                            <Text variant="bodyMedium">{task.description}</Text>
+                            <Markdown>
+                                {task.description}
+                            </Markdown>
                         </Card.Content>
                     </Card>
 
@@ -218,7 +220,7 @@ export default function TaskDetailScreen() {
                                         <Button onPress={() => {
                                             setModalDeleteComment(true);
                                             setSelectedId(comment.id);
-                                            }}>Remove</Button>
+                                        }}>Remove</Button>
                                     </Card.Actions>
                                 </Card.Content>
                             </Card>
@@ -260,7 +262,7 @@ export default function TaskDetailScreen() {
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => setModalDeleteComment(false)}>Cancel</Button>
-                        <Button onPress={handleDeleteComment}>Yes</Button>
+                        <Button onPress={handleDeleteComment}>Remove</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

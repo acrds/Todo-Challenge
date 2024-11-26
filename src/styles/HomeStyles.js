@@ -17,6 +17,7 @@ export default styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         marginVertical: 20,
+        color: "#004aad"
     },
     titleProject: {
         fontWeight: 700
@@ -74,4 +75,7 @@ export default styles = StyleSheet.create({
     createButton: {
         marginTop: 20,
     },
+    dialog: {
+        textAlign: 'center',
+      },
 });

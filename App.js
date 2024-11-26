@@ -26,7 +26,7 @@ export default function App() {
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Projects" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Task" component={TaskScreen} />

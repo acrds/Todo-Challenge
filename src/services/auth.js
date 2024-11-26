@@ -6,7 +6,6 @@ export const registerUser = async (data) => {
     const response = await api.post("users/register", data); 
     return response.data;
   } catch (error) {
-    console.error("Error in register user:", error);
     throw error;
   }
 };
@@ -17,7 +16,6 @@ export const loginUser = async (data) => {
     const response = await api.post("users/login", data);
     return response.data;
   } catch (error) {
-    console.error("Error in log in user:", error);
     throw error;
   }
 };
@@ -28,7 +26,7 @@ export const listProjects = async () => {
       const response = await api.get("projects");
       return response.data?.projects;
     } catch (error) {
-      console.error("Error in list all projects:", error);
+
       throw error;
     }
 };
@@ -39,7 +37,6 @@ export const createProject = async (data) => {
     const response = await api.post("projects", data);
     return response.data;
   } catch (error) {
-    console.error("Error in create a project:", error);
     throw error;
   }
 };
@@ -50,7 +47,6 @@ export const deleteProject = async (projectId) => {
     const response = await api.delete(`projects/${projectId}`);
     return response.data;
   } catch (error) {
-    console.error("Error in delete a project:", error);
     throw error;
   }
 };
@@ -61,7 +57,6 @@ export const listTaskAproject = async (projectId) => {
     const response = await api.get(`tasks/project/${projectId}`);
     return response.data?.tasks;
   } catch (error) {
-    console.error("Error in get all tasks of a project:", error);
     throw error;
   }
 };
@@ -72,7 +67,6 @@ export const createTask = async (data) => {
     const response = await api.post("tasks", data);
     return response.data;
   } catch (error) {
-    console.error("Error in create a task:", error);
     throw error;
   }
 };
@@ -83,7 +77,6 @@ export const generateDescriptionNewTask = async (data) => {
     const response = await api.post("tasks/gen-description", data);
     return response.data?.description;
   } catch (error) {
-    console.error("Error in generate task new description:", error);
     throw error;
   }
 };
@@ -94,7 +87,6 @@ export const createComment = async (data) => {
     const response = await api.post("comments", data);
     return response.data;
   } catch (error) {
-    console.error("Error in create a comment:", error);
     throw error;
   }
 };
@@ -107,7 +99,6 @@ export const updateComment = async (data, taskId) => {
     console.log ("response: ", response.data)
     return response.data;
   } catch (error) {
-    console.error("Error in update a comment:", error);
     throw error;
   }
 };
@@ -118,7 +109,6 @@ export const deleteComment = async (taskId) => {
     const response = await api.delete(`comments/${taskId}`);
     return response.data;
   } catch (error) {
-    console.error("Error in delete a comment:", error);
     throw error;
   }
 };
@@ -129,7 +119,6 @@ export const updateStatus = async (data) => {
     const response = await api.post("taskstates", data);
     return response.data;
   } catch (error) {
-    console.error("Error in update status:", error);
     throw error;
   }
 };

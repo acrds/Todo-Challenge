@@ -60,7 +60,7 @@ export default function RegisterScreen() {
             <TextInput
                 label="Email*"
                 mode="outlined"
-                value={email}
+                value={email.toLowerCase()}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 style={styles.input}

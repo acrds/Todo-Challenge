@@ -82,7 +82,6 @@ export default function HomeScreen() {
             setProjects(fetchProject);
             alert('Project deleted successfully');
         } catch (error) {
-            console.log("erro function: ", JSON.stringify(error))
             if (error.status === 500) {
                 alert("Error internal. Try later");
             } else if (error.status === 401) {
@@ -118,7 +117,7 @@ export default function HomeScreen() {
                         <>
                             <View style={styles.div}>
                                 <Image
-                                    source={require('../../assets/investigation.png')}
+                                    source={require('../../assets/noproject.png')}
                                     style={styles.logo}
                                     resizeMode="contain"
                                 />
@@ -163,13 +162,13 @@ export default function HomeScreen() {
             <Portal>
                 <Dialog visible={modalDeleteProject} onDismiss={() => setModalDeleteProject(false)}>
                     <Dialog.Icon icon="trash-can" size={35} />
-                    <Dialog.Title style={styles.dialog}>Attention</Dialog.Title>
+                    <Dialog.Title style={styles.dialog}>Confirmation</Dialog.Title>
                     <Dialog.Content>
-                        <Text variant="bodyMedium">Are you sure to remove this project?</Text>
+                        <Text variant="bodyMedium">After deleting a project, it can`t be undone.</Text>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => setModalDeleteProject(false)}>Cancel</Button>
-                        <Button onPress={handleDeleteProject}>Yes</Button>
+                        <Button onPress={handleDeleteProject}>Remove</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>

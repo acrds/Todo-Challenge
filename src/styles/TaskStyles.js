@@ -7,9 +7,10 @@ export default styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 16,
+        fontSize: 24,
+        fontWeight: "bold",
+        color: "#004aad",
+        marginBottom: 10
     },
     div: {
         marginLeft: 50,
