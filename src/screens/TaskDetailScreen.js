@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { createComment, listTaskAproject, updateStatus } from '../services/auth';
-import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Divider, Paragraph, ActivityIndicator } from "react-native-paper";
+import { createComment, deleteComment, listTaskAproject, updateComment, updateStatus } from '../services/auth';
+import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Dialog, Paragraph, ActivityIndicator } from "react-native-paper";
 import styles from '../styles/TaskDetailStyles';
 
 export default function TaskDetailScreen() {
@@ -15,6 +15,10 @@ export default function TaskDetailScreen() {
     const [isFormValid, setIsFormValid] = useState(false);
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [selectedComment, setSelectedComment] = useState("");
+    const [modalComment, setModalComment] = useState(false);
+    const [modalDeleteComment, setModalDeleteComment] = useState(false);
+    const [selectedId, setSelectedId] = useState("");
 
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
@@ -66,7 +70,56 @@ export default function TaskDetailScreen() {
             alert("Failed to update status. Please try again.");
         } finally {
             setLoading(false);
-            closeMenu();
+        }
+    };
+
+    const handleDeleteComment = async () => {
+        try {
+            setLoading(true);
+            await deleteComment(selectedId);
+            const fetchTask = await getAllTasks();
+            setTask(fetchTask);
+            alert('Comment deleted successfully');
+        } catch (error) {
+            console.log("erro function: ", JSON.stringify(error))
+            if (error.status === 500) {
+                alert("Error internal. Try later");
+            } else if (error.status === 401) {
+                alert("User not found");
+            } else if (error.status === 404) {
+                alert("Comment not found");
+            } else {
+                alert(error.message);
+            }
+        } finally {
+            setModalDeleteComment(false);
+            setSelectedId("");
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateComment = async () => {
+        try {
+            setLoading(true);
+            await updateComment({ text: selectedComment}, selectedId );
+            const fetchTask = await getAllTasks();
+            setTask(fetchTask);
+            alert('Comment updated successfully');
+        } catch (error) {
+            if (error.status === 500) {
+                alert("Error internal. Try later");
+            } else if (error.status === 401) {
+                alert("User not found");
+            } else if (error.status === 404) {
+                alert("Comment not found");
+            } else {
+                alert(error.message);
+            }
+        } finally {
+            setSelectedComment("");
+            setSelectedId("");
+            setModalComment(false);
+            setLoading(false);
         }
     };
 
@@ -112,6 +165,7 @@ export default function TaskDetailScreen() {
                 />
             ) : (
                 <ScrollView contentContainerStyle={styles.scrollContent}>
+                    <Title style={styles.titleTask}>{task.name}</Title>
                     <View style={styles.cardHeader}>
                         <Image
                             source={require('../../assets/task-list.png')}
@@ -133,14 +187,13 @@ export default function TaskDetailScreen() {
                             {status.map((status) => (
                                 <Menu.Item
                                     key={status.id}
-                                    onPress={() => { console.log(status); handleStatusChange(status.id) }}
+                                    onPress={() => handleStatusChange(status.id)}
                                     title={status.name}
                                     disabled={status.id === task?.currentState?.state?.id}
                                 />
                             ))}
                         </Menu>
                     </View>
-                    <Title style={styles.titleTask}>{task.name}</Title>
                     <Card>
                         <Text style={styles.subtitle}>Description:</Text>
                         <Card.Content>
@@ -149,17 +202,23 @@ export default function TaskDetailScreen() {
                     </Card>
 
                     {emptyCommentList ? (
-                        <Text>No comments yet for this task</Text>
+                        <Text style={styles.noTextComment}>No comments yet for this task</Text>
                     ) : (
                         task.comments?.map(comment => (
                             <Card key={comment.id} style={styles.card}>
                                 <Card.Content>
                                     <Paragraph style={styles.headerComment}>Modified at: {formatDate(comment.updatedAt)}</Paragraph>
-                                    <Divider />
                                     <Paragraph>{comment.text}</Paragraph>
-                                    <Card.Actions>
-                                        <Button>Edit</Button>
-                                        <Button>Cancel</Button>
+                                    <Card.Actions style={styles.commentModal}>
+                                        <Button onPress={() => {
+                                            setModalComment(true);
+                                            setSelectedComment(comment.text);
+                                            setSelectedId(comment.id);
+                                        }}>Edit</Button>
+                                        <Button onPress={() => {
+                                            setModalDeleteComment(true);
+                                            setSelectedId(comment.id);
+                                            }}>Remove</Button>
                                     </Card.Actions>
                                 </Card.Content>
                             </Card>
@@ -173,6 +232,39 @@ export default function TaskDetailScreen() {
                 style={styles.fab}
                 onPress={() => setModalVisible(true)}
             />
+            <Portal>
+                <Modal visible={modalComment} onDismiss={() => setModalComment(false)} contentContainerStyle={styles.modal}>
+                    <Title style={styles.modalTitle}>Edit Comment</Title>
+
+                    <TextInput
+                        label="UpdateComment"
+                        mode="outlined"
+                        value={selectedComment}
+                        onChangeText={setSelectedComment}
+                        style={styles.input}
+                        multiline
+                    />
+
+                    <Button mode="contained" onPress={handleUpdateComment} style={[styles.createButton, { backgroundColor: "#004aad" }]}>
+                        Update Comment
+                    </Button>
+                </Modal>
+            </Portal>
+
+            <Portal>
+                <Dialog visible={modalDeleteComment} onDismiss={() => setModalDeleteComment(false)}>
+                    <Dialog.Icon icon="trash-can" size={35} />
+                    <Dialog.Title style={styles.dialog}>Attention</Dialog.Title>
+                    <Dialog.Content>
+                        <Text variant="bodyMedium">Are you sure to remove this comment?</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setModalDeleteComment(false)}>Cancel</Button>
+                        <Button onPress={handleDeleteComment}>Yes</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
+
             <Portal>
                 <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modal}>
                     <Title style={styles.modalTitle}>Add Comment</Title>
@@ -191,6 +283,7 @@ export default function TaskDetailScreen() {
                     </Button>
                 </Modal>
             </Portal>
+
         </View >
     );
 }

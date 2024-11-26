@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { listProjects, createProject } from '../services/auth';
-import { Card, Title, Paragraph, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme } from "react-native-paper";
+import { listProjects, createProject, deleteProject } from '../services/auth';
+import { Card, Title, Paragraph, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text } from "react-native-paper";
 import styles from '../styles/HomeStyles';
 
 export default function HomeScreen() {
@@ -11,10 +11,13 @@ export default function HomeScreen() {
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadDelete, setLoadDelete] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [newTitle, setNewTitle] = useState("");
     const [newDescription, setNewDescription] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
+    const [modalDeleteProject, setModalDeleteProject] = useState(false);
+    const [selectedId, setSelectedId] = useState("");
 
     const getAllProjects = async () => {
         try {
@@ -36,7 +39,7 @@ export default function HomeScreen() {
         setIsFormValid(isValid);
     }, [newTitle, newDescription]);
 
-    useEffect(()=>{
+    useEffect(() => {
         getAllProjects();
     }, [])
 
@@ -61,7 +64,7 @@ export default function HomeScreen() {
                 alert("Project created successfully");
             } else if (error.status === 400) {
                 alert("Fields are required");
-            }else {
+            } else {
                 alert(error.message);
             }
         } finally {
@@ -71,12 +74,37 @@ export default function HomeScreen() {
         }
     };
 
+    const handleDeleteProject = async () => {
+        try {
+            setLoadDelete(true);
+            await deleteProject(selectedId);
+            const fetchProject = await getAllProjects();
+            setProjects(fetchProject);
+            alert('Project deleted successfully');
+        } catch (error) {
+            console.log("erro function: ", JSON.stringify(error))
+            if (error.status === 500) {
+                alert("Error internal. Try later");
+            } else if (error.status === 401) {
+                alert("User not found");
+            } else if (error.status === 404) {
+                alert("Project not found");
+            } else {
+                alert(error.message);
+            }
+        } finally {
+            setModalDeleteProject(false);
+            setSelectedId("");
+            setLoadDelete(false);
+        }
+    };
+
     var emptyProjectList = projects?.length == 0;
 
     return (
         <View style={styles.container}>
 
-            {loading ? (
+            {loading || loadDelete ? (
                 <ActivityIndicator
                     animating={true}
                     size="large"
@@ -103,10 +131,20 @@ export default function HomeScreen() {
                             <Card onPress={() => navigation.navigate('Task', { project: project })} key={project.id} style={styles.card}>
                                 <Card.Content>
                                     <View style={styles.cardHeader}>
-                                        <Title style={styles.titleProject}>{project.name}</Title>
-                                        <IconButton icon="calendar" size={24} />
+                                        <View>
+                                            <Title style={styles.titleProject}>{project.name}</Title>
+                                            <Paragraph>{project.description}</Paragraph>
+                                        </View>
+                                        <View style={styles.itensHeader}>
+                                            <IconButton icon="bookmark-multiple" size={30} />
+                                            <IconButton onPress={() => {
+                                                setModalDeleteProject(true);
+                                                setSelectedId(project.id);
+                                            }} icon="delete" size={30} />
+                                        </View>
+
                                     </View>
-                                    <Paragraph>{project.description}</Paragraph>
+
                                 </Card.Content>
                             </Card>
                         ))
@@ -121,6 +159,20 @@ export default function HomeScreen() {
                 style={styles.fab}
                 onPress={() => setModalVisible(true)}
             />
+
+            <Portal>
+                <Dialog visible={modalDeleteProject} onDismiss={() => setModalDeleteProject(false)}>
+                    <Dialog.Icon icon="trash-can" size={35} />
+                    <Dialog.Title style={styles.dialog}>Attention</Dialog.Title>
+                    <Dialog.Content>
+                        <Text variant="bodyMedium">Are you sure to remove this project?</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setModalDeleteProject(false)}>Cancel</Button>
+                        <Button onPress={handleDeleteProject}>Yes</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             <Portal>
                 <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modal}>
                     <Title style={styles.modalTitle}>Create New Project</Title>

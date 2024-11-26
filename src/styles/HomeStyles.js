@@ -34,13 +34,18 @@ export default styles = StyleSheet.create({
         height: 200,
     },
     card: {
-        marginBottom: 16,
+        marginBottom: 10,
         borderRadius: 8,
         elevation: 2,
-        backgroundColor: "#8bbaf8"
+        backgroundColor: "#d0d9e6"
     },
     cardHeader: {
         flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    itensHeader:{
+        flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
     },

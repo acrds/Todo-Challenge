@@ -54,7 +54,7 @@ export default function LoginScreen() {
             <TextInput
                 mode="outlined"
                 label="Email"
-                value={email}
+                value={email.toLowerCase()}
                 onChangeText={setEmail}
                 style={styles.input}
                 keyboardType="email-address"

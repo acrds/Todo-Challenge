@@ -22,7 +22,6 @@ export default styles = StyleSheet.create({
     },
     scrollContent: {
         paddingHorizontal: 16,
-        paddingBottom: 80,
     },
     titleTask: {
         fontWeight: 700,
@@ -31,16 +30,16 @@ export default styles = StyleSheet.create({
     },
     cardHeader: {
         flexDirection: 'row',
-        display: 'flex'
+        display: 'flex',
+        justifyContent: 'flex-start'
     },
     tasksText: {
         fontSize: 16,
     },
     card: {
-        marginBottom: 10,
         borderRadius: 8,
         elevation: 2,
-        backgroundColor: "#8bbaf8",
+        backgroundColor: "#d0d9e6",
         marginTop: 14
     },
     fab: {
@@ -87,5 +86,8 @@ export default styles = StyleSheet.create({
     },
     noTasksText: {
         textAlign: 'center'
+    },
+    boldText: {
+        fontWeight: "bold",
     }
 });

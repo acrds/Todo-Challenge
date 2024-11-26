@@ -3,7 +3,7 @@ import { View, Image, ScrollView } from 'react-native';
 import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Paragraph } from 'react-native-paper';
 import styles from '../styles/TaskStyles';
 import { listTaskAproject, generateDescriptionNewTask, createTask } from '../services/auth';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 export default function TaskScreen() {
     const route = useRoute();
@@ -19,6 +19,17 @@ export default function TaskScreen() {
     const [newDescription, setNewDescription] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [hasTitle, setHasTitle] = useState(false);
+
+    const fetchTasks = async () => {
+        const updatedTasks = await listTaskAproject(project?.id);
+        setTasks(updatedTasks);
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchTasks();
+        }, [])
+    );
 
     const getAllTasks = async () => {
         try {
@@ -91,6 +102,7 @@ export default function TaskScreen() {
 
     const generateDescription = async () => {
         try {
+            setLoading(true);
             if (newTitle.trim() && project?.id) {
                 const newTask = {
                     taskName: newTitle,
@@ -113,6 +125,8 @@ export default function TaskScreen() {
             } else {
                 alert(error.message);
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -148,7 +162,7 @@ export default function TaskScreen() {
         const filteredTasks_ = tasks.filter(task => {
             return selectedStatusList.includes(task.currentState.state.name)
         })
-        setFilteredTasks( filteredTasks_ )
+        setFilteredTasks(filteredTasks_)
     }
 
     return (
@@ -163,7 +177,7 @@ export default function TaskScreen() {
                 <>
                     <ScrollView contentContainerStyle={styles.scrollContent}>
                         <Title style={styles.header}>Your Tasks {tasks?.length ? `(${tasks?.length})` : "(0)"}</Title>
-                        <SegmentedButtons
+                        <SegmentedButtons theme={{ colors: { primary: 'green' } }}
                             value={selectedStatuses}
                             onValueChange={(selectedStatusList) => {
                                 setSelectedStatuses(selectedStatusList);
@@ -171,8 +185,8 @@ export default function TaskScreen() {
                             }}
                             buttons={[
                                 { value: 'To Do', label: 'TO DO', icon: 'circle' },
-                                { value: 'Doing', label: 'DOING', icon: 'circle-slice-5' },
-                                { value: 'Done', label: 'DONE', icon: 'circle-slice-8' },
+                                { value: 'Doing', label: 'DOING', icon: 'circle-slice-5'},
+                                { value: 'Done', label: 'DONE', icon: 'circle-slice-8'},
                             ]}
                             multiSelect
                         />
@@ -195,7 +209,7 @@ export default function TaskScreen() {
                                         </View>
                                         <Paragraph>Created at: {formatDate(task.createdAt)}</Paragraph>
                                         <Paragraph>Updated at: {formatDate(task.updatedAt)}</Paragraph>
-                                        <Paragraph>Status: {task?.currentState?.state?.name}</Paragraph>
+                                        <Paragraph style={styles.boldText}>Status: {task?.currentState?.state?.name}</Paragraph>
                                     </Card.Content>
                                 </Card>
 

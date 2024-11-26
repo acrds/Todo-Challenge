@@ -44,6 +44,17 @@ export const createProject = async (data) => {
   }
 };
 
+//Delete a project
+export const deleteProject = async (projectId) => {
+  try {
+    const response = await api.delete(`projects/${projectId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in delete a project:", error);
+    throw error;
+  }
+};
+
 //List all tasks of a project
 export const listTaskAproject = async (projectId) => {
   try {
@@ -91,7 +102,9 @@ export const createComment = async (data) => {
 //Edit comment
 export const updateComment = async (data, taskId) => {
   try {
+    console.log ("body: ", data, " id", taskId)
     const response = await api.put(`comments/${taskId}`, data);
+    console.log ("response: ", response.data)
     return response.data;
   } catch (error) {
     console.error("Error in update a comment:", error);

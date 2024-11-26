@@ -39,15 +39,18 @@ export default styles = StyleSheet.create({
         marginTop: 40
     },
     card: {
-        marginBottom: 16,
+        marginTop: 16,
+        marginLeft: 40,
         borderRadius: 8,
         elevation: 2,
-        backgroundColor: "#8bbaf8"
+        backgroundColor: "#d0d9e6",
+        maxHeight: 150
     },
     cardHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        marginLeft: 30
     },
     fab: {
         position: 'absolute',
@@ -80,6 +83,15 @@ export default styles = StyleSheet.create({
     },
     headerComment:{
         fontSize: 10
+    },
+    dialog:{
+        textAlign: 'center'
+    },
+    noTextComment: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginTop: 18
     }
 
 });
