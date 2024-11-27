@@ -108,6 +108,20 @@ export default function HomeScreen() {
         }
     };
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const offset = -3;
+        const adjustedDate = new Date(date.getTime() + offset * 60 * 60 * 1000);
+        const day = String(adjustedDate.getUTCDate()).padStart(2, '0');
+        const month = String(adjustedDate.getUTCMonth() + 1).padStart(2, '0');
+        const year = adjustedDate.getUTCFullYear();
+        const hours = String(adjustedDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(adjustedDate.getUTCMinutes()).padStart(2, '0');
+
+        return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
+    }
+
+
     var emptyProjectList = projects?.length == 0;
 
     return (
@@ -156,7 +170,7 @@ export default function HomeScreen() {
                                         <Text>{project.description}</Text>
                                     </View>
                                     <View style={styles.footterContainer}>
-                                        <Text style={styles.footterText}>Created At: 22/22/22</Text>
+                                        <Text style={styles.footterText}>{`Created At: ${formatDate(project.createdAt).substring(0,10)}`}</Text>
                                         <Text style={styles.footterTask}>5/11</Text>
                                     </View>
                                 </View>

@@ -143,20 +143,6 @@ export default function TaskScreen() {
         return icon
     }
 
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const offset = -3;
-        const adjustedDate = new Date(date.getTime() + offset * 60 * 60 * 1000);
-        const day = String(adjustedDate.getUTCDate()).padStart(2, '0');
-        const month = String(adjustedDate.getUTCMonth() + 1).padStart(2, '0');
-        const year = adjustedDate.getUTCFullYear();
-        const hours = String(adjustedDate.getUTCHours()).padStart(2, '0');
-        const minutes = String(adjustedDate.getUTCMinutes()).padStart(2, '0');
-
-        return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
-    }
-
     function onUpdateFilter(selectedStatusList) {
         const filteredTasks_ = tasks.filter(task => {
             return selectedStatusList.includes(task.currentState.state.name)
