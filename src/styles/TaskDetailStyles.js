@@ -8,11 +8,14 @@ export default styles = StyleSheet.create({
     logo: {
         width: 150,
         height: 150,
-        paddingHorizontal: 16,
+        width: '100%',
+        textAlign: 'right', 
+        transform: [{ rotate: '20deg'}]
     },
     container: {
         flex: 1,
         backgroundColor: "#F5F5F5",
+        padding: 8
     },
     scrollContent: {
         paddingHorizontal: 16,
@@ -31,8 +34,8 @@ export default styles = StyleSheet.create({
     titleTask: {
         fontWeight: 'bold',
         fontSize: 22,
-        marginVertical: 20,
-        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 16,
         color: "#004aad",
     },
     div: {
@@ -44,14 +47,34 @@ export default styles = StyleSheet.create({
         marginLeft: 40,
         borderRadius: 8,
         elevation: 2,
-        backgroundColor: "#d0d9e6",
+        backgroundColor: "#c2c2c2",
         maxHeight: 150
     },
     cardHeader: {
         flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginLeft: 30
+        flex: 1,
+        marginBottom: 6
+    },
+    containerHeaderLeft: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        paddingTop: 6,
+        paddingBottom: 6
+
+    },
+    containerHeaderRight: {
+        flex: 1,
+    },
+    viewButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        textAlign: 'stretch',
+    },
+    modalCommentaries: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: 'flex-start'
     },
     fab: {
         position: 'absolute',
@@ -82,10 +105,11 @@ export default styles = StyleSheet.create({
     status: {
         marginStart: 190,
     },
-    headerComment:{
-        fontSize: 10
+    headerComment: {
+        fontSize: 10,
+        paddingLeft: 4,
     },
-    dialog:{
+    dialog: {
         textAlign: 'center'
     },
     noTextComment: {
@@ -96,6 +120,27 @@ export default styles = StyleSheet.create({
     },
     desc: {
         fontSize: 12
-    }
-
+    },
+    buttonEditRemove: {
+        color: 'white'
+    },
+    dates: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 12,
+        textAlign: 'left',
+        margin: 6,
+        paddingLeft: 4,
+        color: "gray"
+    }, 
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
 });

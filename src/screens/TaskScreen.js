@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, ScrollView } from 'react-native';
-import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Paragraph } from 'react-native-paper';
+import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Paragraph, Text } from 'react-native-paper';
 import styles from '../styles/TaskStyles';
-import { listTaskAproject, generateDescriptionNewTask, createTask } from '../services/auth';
+import { listTaskAproject, generateDescriptionNewTask, createTask } from '../services/routes';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 export default function TaskScreen() {
@@ -24,7 +24,6 @@ export default function TaskScreen() {
         const updatedTasks = await listTaskAproject(project?.id);
         setTasks(updatedTasks);
     };
-
     useFocusEffect(
         React.useCallback(() => {
             fetchTasks();
@@ -133,7 +132,7 @@ export default function TaskScreen() {
     function iconStatus(element) {
         let icon = '';
         if (element === 'to-do') {
-            icon = 'circle'
+            icon = 'circle-outline'
         } else if (element === "doing") {
             icon = 'circle-slice-5'
         } else if (element === 'done') {
@@ -168,16 +167,15 @@ export default function TaskScreen() {
     return (
         <View style={styles.container}>
             {loading ? (
-                <ActivityIndicator
-                    animating={true}
-                    size="large"
-                    style={styles.loadingIndicator}
-                />
+                    <View style={styles.overlay}>
+                        <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} />
+                        <Text style={styles.loadingText}>Generating description...</Text>
+                    </View>
             ) : (
                 <>
                     <ScrollView contentContainerStyle={styles.scrollContent}>
                         <Title style={styles.header}>Your Tasks {tasks?.length ? `(${tasks?.length})` : "(0)"}</Title>
-                        <SegmentedButtons theme={{ colors: { primary: 'green' } }}
+                        <SegmentedButtons theme={{ colors: { primary: '#004aad' } }}
                             value={selectedStatuses}
                             onValueChange={(selectedStatusList) => {
                                 setSelectedStatuses(selectedStatusList);
@@ -185,10 +183,11 @@ export default function TaskScreen() {
                             }}
                             buttons={[
                                 { value: 'To Do', label: 'TO DO', icon: 'circle-outline' },
-                                { value: 'Doing', label: 'DOING', icon: 'circle-slice-5'},
-                                { value: 'Done', label: 'DONE', icon: 'circle-slice-8'},
+                                { value: 'Doing', label: 'DOING', icon: 'circle-slice-5' },
+                                { value: 'Done', label: 'DONE', icon: 'circle-slice-8' },
                             ]}
                             multiSelect
+                            style={styles.segmentButton}
                         />
                         {emptyTaskList ? (
                             <View style={styles.div}>
@@ -202,15 +201,21 @@ export default function TaskScreen() {
                         ) : (
                             filteredTasks?.map(task => (
                                 <Card onPress={() => navigation.navigate('TaskDetail', { task: task, project: project })} key={task.id} style={styles.card}>
-                                    <Card.Content>
-                                        <View style={styles.cardHeader}>
-                                            <IconButton icon={iconStatus(task?.currentState?.state?.slug)} iconColor={task?.currentState?.state?.color} size={24} />
-                                            <Title style={styles.titleTask}>{task.name}</Title>
+                                    <View style={styles.cardHeader}>
+                                        <View style={styles.statusContainer}>
+                                            <IconButton style={styles.statusIcon} icon={iconStatus(task?.currentState?.state?.slug)} iconColor={task?.currentState?.state?.color} size={28} />
+                                            <Text style={styles.statusTask}>{task?.currentState?.state?.name}</Text>
                                         </View>
-                                        <Paragraph>Created at: {formatDate(task.createdAt)}</Paragraph>
-                                        <Paragraph>Updated at: {formatDate(task.updatedAt)}</Paragraph>
-                                        <Paragraph style={styles.boldText}>Status: {task?.currentState?.state?.name}</Paragraph>
-                                    </Card.Content>
+                                        <View style={styles.titleContainer}>
+                                            <Title style={styles.titleTask}>{task.name}</Title>
+                                            <View style={styles.commentContainer}>
+                                                <View style={styles.commentRect}>
+                                                    <IconButton style={styles.statusComment} icon={'comment'} iconColor={'black'} size={15} />
+                                                    <Text style={styles.commentText}>{task.comments.length ? task.comments.length : 0}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </View>
                                 </Card>
 
                             ))

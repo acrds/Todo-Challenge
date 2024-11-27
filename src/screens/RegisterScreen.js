@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
-import { TextInput, Button, useTheme, Icon } from "react-native-paper";
+import { View, Image } from "react-native";
+import { TextInput, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { registerUser } from "../services/auth";
+import { registerUser } from "../services/routes";
+import styles from '../styles/RegisterStyles';
 
 export default function RegisterScreen() {
     const theme = useTheme();
@@ -42,12 +43,11 @@ export default function RegisterScreen() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.icon}>
-                <Icon
-                    source="account"
-                    size={90}
-                />
-            </View>
+            <Image
+                source={require('../../assets/logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+            />
 
             <TextInput
                 label="Name*"

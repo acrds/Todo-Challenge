@@ -8,9 +8,10 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
     },
-    icon:{
-        marginLeft: 9,
-        paddingLeft: 29
+    logo: {
+        width: 200,
+        height: 200,
+        textAlign: 'center',
     },
     content: {
         flex: 1,
@@ -32,3 +33,4 @@ export default styles = StyleSheet.create({
         backgroundColor: 'green',
     },
 });
+

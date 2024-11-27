@@ -3,7 +3,7 @@ import styles from '../styles/LoginStyles';
 import { View, Image } from 'react-native';
 import { Button, useTheme, TextInput, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { loginUser } from '../services/auth';
+import { loginUser } from '../services/routes';
 import { saveToken } from "../utils/tokenStorage";
 
 export default function LoginScreen() {
@@ -26,30 +26,30 @@ export default function LoginScreen() {
         try {
             const data = { email, password };
             const response = await loginUser(data);
-            const { token } = response; 
-            await saveToken(token); 
-            navigation.navigate("Projects"); 
+            const { token } = response;
+            await saveToken(token);
+            navigation.replace("Projects");
         } catch (error) {
-            if (error.status === 400){
+            if (error.status === 400) {
                 alert("Fields are required");
-            }else if (error.status === 404) {
+            } else if (error.status === 404) {
                 alert("User not found. Please register");
-            }else if (error.status === 401) {
+            } else if (error.status === 401) {
                 alert("Invalid credentials");
-            }else {
+            } else {
                 alert(error.message);
             }
-        } 
-      };
-    
+        }
+    };
+
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <Image
-                source={require('../../assets/logo.png')}
-                style={styles.logo}
-                resizeMode="contain"
-            />
+        <View style={styles.container}>
+                <Image
+                    source={require('../../assets/logo.png')}
+                    style={styles.logo}
+                    resizeMode="contain"
+                />
 
             <TextInput
                 mode="outlined"
@@ -72,13 +72,13 @@ export default function LoginScreen() {
                 mode="contained"
                 onPress={handleLogin}
                 disabled={!isFormValid}
-                style={[styles.button, { backgroundColor: isFormValid ? "#004aad": theme.colors.disabled}]}
+                style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}
             >
                 Sign in
             </Button>
 
             <Text style={styles.registerText}>
-            Don't have an account yet?{' '}
+                Don't have an account yet?{' '}
                 <Text
                     style={styles.link}
                     onPress={() => navigation.navigate('Register')}

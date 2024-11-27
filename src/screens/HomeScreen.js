@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { listProjects, createProject, deleteProject } from '../services/auth';
-import { Card, Title, Paragraph, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text } from "react-native-paper";
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { listProjects, createProject, deleteProject } from '../services/routes';
+import { Card, Title, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text } from "react-native-paper";
 import styles from '../styles/HomeStyles';
 
 export default function HomeScreen() {
@@ -18,6 +18,16 @@ export default function HomeScreen() {
     const [isFormValid, setIsFormValid] = useState(false);
     const [modalDeleteProject, setModalDeleteProject] = useState(false);
     const [selectedId, setSelectedId] = useState("");
+
+    const fetchProject = async () => {
+        const updatedProjects = await listProjects();
+        setTasks(updatedProjects);
+    };
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchProject();
+        }, [])
+    );
 
     const getAllProjects = async () => {
         try {
@@ -104,11 +114,10 @@ export default function HomeScreen() {
         <View style={styles.container}>
 
             {loading || loadDelete ? (
-                <ActivityIndicator
-                    animating={true}
-                    size="large"
-                    style={styles.loadingIndicator}
-                />
+                <View style={styles.overlay}>
+                    <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} />
+                    <Text style={styles.loadingText}>Loading...</Text>
+                </View>
             ) : (
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <Title style={styles.title}>Your Projects {projects?.length ? `(${projects?.length})` : "(0)"}</Title>
@@ -128,23 +137,29 @@ export default function HomeScreen() {
                     ) : (
                         projects?.map((project) => (
                             <Card onPress={() => navigation.navigate('Task', { project: project })} key={project.id} style={styles.card}>
-                                <Card.Content>
-                                    <View style={styles.cardHeader}>
-                                        <View>
-                                            <Title style={styles.titleProject}>{project.name}</Title>
-                                            <Paragraph>{project.description}</Paragraph>
+                                <View style={styles.cardHeader}>
+                                    <View style={styles.titleContainer}>
+                                        <View style={styles.contentTitleLeft}>
+                                            <Text style={styles.titleProject}>{project.name}</Text>
                                         </View>
-                                        <View style={styles.itensHeader}>
-                                            <IconButton icon="bookmark-multiple" size={30} />
+
+                                        <View style={styles.contentTitleRight}>
                                             <IconButton onPress={() => {
                                                 setModalDeleteProject(true);
                                                 setSelectedId(project.id);
-                                            }} icon="delete" size={30} />
+                                            }} icon="delete" size={25} />
                                         </View>
 
                                     </View>
 
-                                </Card.Content>
+                                    <View style={styles.descriptionContainer}>
+                                        <Text>{project.description}</Text>
+                                    </View>
+                                    <View style={styles.footterContainer}>
+                                        <Text style={styles.footterText}>Created At: 22/22/22</Text>
+                                        <Text style={styles.footterTask}>5/11</Text>
+                                    </View>
+                                </View>
                             </Card>
                         ))
                     )}
@@ -181,7 +196,6 @@ export default function HomeScreen() {
                         mode="outlined"
                         value={newTitle}
                         onChangeText={setNewTitle}
-                        style={styles.input}
                     />
 
                     <TextInput

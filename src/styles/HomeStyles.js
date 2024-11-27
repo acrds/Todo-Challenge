@@ -4,14 +4,15 @@ export default styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#F5F5F5",
+        padding: 10
     },
     scrollContent: {
         paddingHorizontal: 16,
-        paddingBottom: 80,
     },
     loadingIndicator: {
         marginTop: 50,
         alignSelf: "center",
+        color: "#004aad"
     },
     title: {
         fontSize: 24,
@@ -20,32 +21,58 @@ export default styles = StyleSheet.create({
         color: "#004aad"
     },
     titleProject: {
-        fontWeight: 700
+        fontWeight: 'bold',
+        fontSize: 16
     },
     div: {
-        marginLeft: 50,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 40
     },
     subtitle: {
         fontSize: 16,
-        textAlign: 'center'
+        fontWeight: 'bold'
     },
     logo: {
-        width: 200,
-        height: 200,
+        width: 180,
+        height: 180,
     },
     card: {
-        marginBottom: 10,
-        borderRadius: 8,
-        elevation: 2,
-        backgroundColor: "#d0d9e6"
+        borderRadius: 12,
+        backgroundColor: "#e0defd",
+        marginBottom: 12,
     },
     cardHeader: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'column',
+    },
+    titleContainer: {
+        flexDirection: 'row',
+    },
+    contentTitleLeft: {
+        flex: 5,
+        justifyContent: 'center',
+        padding: 10
+    },
+    contentTitleRight: {
+        flex: 1,
         alignItems: "center",
     },
-    itensHeader:{
+    descriptionContainer: {
+        flexDirection: 'row',
+        padding: 10,
+        height: 60
+    },
+    footterContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        paddingLeft: 10,
+        paddingBottom: 5,
+        paddingTop: 5,
+        paddingRight: 8
+    },
+    itensHeader: {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
@@ -71,11 +98,32 @@ export default styles = StyleSheet.create({
     },
     input: {
         marginBottom: 16,
+        height: 140
     },
     createButton: {
         marginTop: 20,
     },
     dialog: {
         textAlign: 'center',
-      },
+    },
+    footterText: {
+        fontWeight: 'bold', 
+        fontSize: 10
+    },
+    footterTask:{
+        fontWeight: 'bold', 
+        fontSize: 14, 
+        paddingBottom: 8,
+        paddingRight: 8
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
 });

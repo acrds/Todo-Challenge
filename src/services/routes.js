@@ -1,5 +1,6 @@
 import api from "./api";
 
+// User Authentication 
 // Register user
 export const registerUser = async (data) => {
   try {
@@ -9,7 +10,6 @@ export const registerUser = async (data) => {
     throw error;
   }
 };
-
 // Log in user
 export const loginUser = async (data) => {
   try {
@@ -20,6 +20,8 @@ export const loginUser = async (data) => {
   }
 };
 
+
+//Projects
 //List all projects
 export const listProjects = async () => {
     try {
@@ -51,6 +53,7 @@ export const deleteProject = async (projectId) => {
   }
 };
 
+//Tasks
 //List all tasks of a project
 export const listTaskAproject = async (projectId) => {
   try {
@@ -81,6 +84,34 @@ export const generateDescriptionNewTask = async (data) => {
   }
 };
 
+//Update task
+export const updateTask = async (data, taskId) => {
+  try {
+    const response = await api.put(
+      `tasks/${taskId}`,
+      {},
+      { 
+        params: data
+      }
+    );
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.log(JSON.stringify(error))
+    throw error;
+  }
+};
+
+//Delete task
+export const deleteTask = async (taskId) => {
+  try {
+    const response = await api.patch(`tasks/${taskId}/archive`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //Create comment
 export const createComment = async (data) => {
   try {
@@ -94,9 +125,7 @@ export const createComment = async (data) => {
 //Edit comment
 export const updateComment = async (data, taskId) => {
   try {
-    console.log ("body: ", data, " id", taskId)
     const response = await api.put(`comments/${taskId}`, data);
-    console.log ("response: ", response.data)
     return response.data;
   } catch (error) {
     throw error;

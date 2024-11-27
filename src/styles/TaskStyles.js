@@ -3,45 +3,96 @@ import { StyleSheet } from 'react-native';
 export default styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: "#F5F5F5",
+        padding: 10
     },
     header: {
         fontSize: 24,
         fontWeight: "bold",
         color: "#004aad",
-        marginBottom: 10
+        marginBottom: 10, 
+        marginVertical: 20,
     },
     div: {
-        marginLeft: 50,
-        marginTop: 40
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 80
+    },
+    noTasksText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     logo: {
-        width: 250,
-        height: 250,
-        opacity: 50
+        width: 180,
+        height: 180,
+        marginLeft: 35
     },
     scrollContent: {
         paddingHorizontal: 16,
     },
+    statusIcon: {
+        marginBottom: -2,
+        margin: 0
+    },
+    statusComment: {
+        marginRight: 0
+    },
+    statusTask: {
+        fontSize: 12,
+        marginBotton: 10,
+        fontWeight: 'bold', 
+        lineHeight:0
+    },
+    commentContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    commentRect:{
+        flexDirection: 'row',
+        alignItems: 'baseline',
+    },
+    commentText: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        paddingRight: 10,
+    },
     titleTask: {
-        fontWeight: 700,
-        marginLeft: 4,
-        marginTop: 10
+        fontSize: 14,
+        paddingTop: 10,
+        fontWeight: 'bold',
+        // color: '#004aad',
+        textAlign: 'left',
+        width: '100%',
+        paddingLeft: 8,
+        maxHeight: '60',
+        paddingRight: 10,
+        lineHeight: 0
     },
     cardHeader: {
         flexDirection: 'row',
-        display: 'flex',
-        justifyContent: 'flex-start'
+        alignItems: 'stretch',
     },
     tasksText: {
         fontSize: 16,
     },
+    statusContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        flex: 1,
+    },
+    titleContainer: {
+        flexDirection: 'column',
+        flex: 5,
+    },
     card: {
-        borderRadius: 8,
-        elevation: 2,
-        backgroundColor: "#d0d9e6",
-        marginTop: 14
+        borderRadius: 12,
+        backgroundColor: "#e0defd",
+        marginBottom: 12,
+    },
+    segmentButton: {
+        marginBottom: 12
     },
     fab: {
         position: 'absolute',
@@ -68,7 +119,8 @@ export default styles = StyleSheet.create({
     },
     input: {
         marginBottom: 16,
-        maxHeight: 150
+        maxHeight: 150,
+        height: 140
     },
     createButton: {
         marginTop: 20,
@@ -85,10 +137,17 @@ export default styles = StyleSheet.create({
         marginTop: 50,
         alignSelf: "center",
     },
-    noTasksText: {
-        textAlign: 'center'
-    },
     boldText: {
         fontWeight: "bold",
-    }
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
 });
