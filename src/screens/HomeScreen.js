@@ -18,6 +18,11 @@ export default function HomeScreen() {
     const [isFormValid, setIsFormValid] = useState(false);
     const [modalDeleteProject, setModalDeleteProject] = useState(false);
     const [selectedId, setSelectedId] = useState("");
+    const [emptyProjectList, setEmptyProjectList] = useState(false);
+
+    useEffect(() => {
+        setEmptyProjectList(projects?.length === 0);
+    }, [projects]);
 
     const fetchProject = async () => {
         const updatedProjects = await listProjects();
@@ -89,7 +94,7 @@ export default function HomeScreen() {
             setLoadDelete(true);
             await deleteProject(selectedId);
             const fetchProject = await getAllProjects();
-            setProjects(fetchProject);
+            setEmptyProjectList(fetchProject);
             alert('Project deleted successfully');
         } catch (error) {
             if (error.status === 500) {
@@ -121,8 +126,6 @@ export default function HomeScreen() {
         return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
     }
 
-
-    var emptyProjectList = projects?.length == 0;
 
     return (
         <View style={styles.container}>

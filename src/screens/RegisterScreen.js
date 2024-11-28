@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Image } from "react-native";
+import { ScrollView, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { TextInput, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../services/routes";
@@ -42,56 +42,63 @@ export default function RegisterScreen() {
 
 
     return (
-        <View style={styles.container}>
-            <Image
-                source={require('../../assets/logo.png')}
-                style={styles.logo}
-                resizeMode="contain"
-            />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ScrollView contentContainerStyle={styles.container}>
+                    <Image
+                        source={require('../../assets/logo.png')}
+                        style={styles.logo}
+                        resizeMode="contain"
+                    />
 
-            <TextInput
-                label="Name*"
-                mode="outlined"
-                value={name}
-                onChangeText={setName}
-                style={styles.input}
-            />
+                    <TextInput
+                        label="Name*"
+                        mode="outlined"
+                        value={name}
+                        onChangeText={setName}
+                        style={styles.input}
+                    />
 
-            <TextInput
-                label="Email*"
-                mode="outlined"
-                value={email.toLowerCase()}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                style={styles.input}
-            />
+                    <TextInput
+                        label="Email*"
+                        mode="outlined"
+                        value={email.toLowerCase()}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        style={styles.input}
+                    />
 
-            <TextInput
-                label="Password*"
-                mode="outlined"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-                style={styles.input}
-            />
+                    <TextInput
+                        label="Password*"
+                        mode="outlined"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={true}
+                        style={styles.input}
+                    />
 
-            <TextInput
-                label="Repeat password*"
-                mode="outlined"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={true}
-                style={styles.input}
-            />
+                    <TextInput
+                        label="Repeat password*"
+                        mode="outlined"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry={true}
+                        style={styles.input}
+                    />
 
-            <Button
-                mode="contained"
-                onPress={handleRegister}
-                disabled={!isFormValid}
-                style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}
-            >
-                Register
-            </Button>
-        </View>
+                    <Button
+                        mode="contained"
+                        onPress={handleRegister}
+                        disabled={!isFormValid}
+                        style={[styles.button, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}
+                    >
+                        Register
+                    </Button>
+                </ScrollView>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }
