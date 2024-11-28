@@ -298,7 +298,7 @@ export default function TaskDetailScreen() {
                                         <Icon source="comment"
                                             color={'white'}
                                             size={18} />
-                                        <Paragraph style={styles.headerComment}>{`${formatDate(comment.updatedAt).substring(0, 16)} by ${task.comments?.user?.name}`}</Paragraph>
+                                        <Paragraph style={styles.headerComment}>{`${formatDate(comment.updatedAt).substring(0, 16)} by ${comment.user?.name}`}</Paragraph>
                                     </View>
                                     <Paragraph>{comment.text}</Paragraph>
                                     <Card.Actions style={styles.commentModal}>

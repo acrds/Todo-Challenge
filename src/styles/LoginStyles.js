@@ -2,18 +2,24 @@ import { StyleSheet } from 'react-native';
 
 export default styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     paddingHorizontal: 16,
   },
   logo: {
-    width: 280,
-    height: 280,
-    maxHeight: '50%'
+    width: 200,
+    height: 200,
+    textAlign: 'center',
+    marginTop: 80,
   },
   input: {
+    width: '80%',
+    marginBottom: 16,
+  },
+  button: {
     width: '100%',
+    marginTop: 16,
     marginBottom: 16,
   },
   link: {
@@ -21,10 +27,6 @@ export default styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 16,
     alignSelf: 'flex-start',
-  },
-  button: {
-    width: '100%',
-    marginVertical: 16,
   },
   registerText: {
     fontSize: 14,

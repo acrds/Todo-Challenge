@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/LoginStyles';
-import { View, Image } from 'react-native';
+import { Image, ScrollView, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { Button, useTheme, TextInput, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from '../services/routes';
@@ -44,7 +44,12 @@ export default function LoginScreen() {
 
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+    >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView contentContainerStyle={styles.container}>
                 <Image
                     source={require('../../assets/logo.png')}
                     style={styles.logo}
@@ -86,6 +91,7 @@ export default function LoginScreen() {
                     Register now
                 </Text>
             </Text>
-        </View>
-    );
+            </ScrollView>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>    );
 }
