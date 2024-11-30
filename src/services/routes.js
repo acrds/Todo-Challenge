@@ -26,9 +26,8 @@ export const loginUser = async (data) => {
 export const listProjects = async () => {
     try {
       const response = await api.get("projects");
-      return response.data?.projects;
+      return response.data?.response;
     } catch (error) {
-
       throw error;
     }
 };
@@ -53,6 +52,16 @@ export const deleteProject = async (projectId) => {
   }
 };
 
+//Propose a plan
+export const getProposePlan = async (projectId) => {
+  try {
+    const response = await api.get(`projects/plan/${projectId}`);
+    return response.data.planAnnotated;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //Tasks
 //List all tasks of a project
 export const listTaskAproject = async (projectId) => {
@@ -69,6 +78,16 @@ export const createTask = async (data) => {
   try {
     const response = await api.post("tasks", data);
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Create a task with AI
+export const createTaskAI = async (data) => {
+  try {
+    const response = await api.post("tasks/propose", data );
+    return response.data.task;
   } catch (error) {
     throw error;
   }
@@ -151,3 +170,5 @@ export const updateStatus = async (data) => {
     throw error;
   }
 };
+
+

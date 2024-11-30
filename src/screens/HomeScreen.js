@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { listProjects, createProject, deleteProject } from '../services/routes';
-import { Card, Title, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text } from "react-native-paper";
+import { Card, Title, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text, ProgressBar } from "react-native-paper";
 import styles from '../styles/HomeStyles';
 
 export default function HomeScreen() {
@@ -126,6 +126,20 @@ export default function HomeScreen() {
         return `${day}/${month}/${year} ${hours}:${minutes} (-3GMT)`;
     }
 
+    function calculateMetrics(project){
+        const done = project.tasksMetrics.doneCount;
+        const total = project.tasksMetrics.doingCount + project.tasksMetrics.doneCount + project.tasksMetrics.todoCount;
+
+        var progress = 0;
+        if (total != 0){
+            progress =  done / total;
+        }
+
+        return {
+            progress: parseFloat(progress.toFixed(1)),
+            progressFormat: `${done}/${total}`
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -173,8 +187,15 @@ export default function HomeScreen() {
                                         <Text>{project.description}</Text>
                                     </View>
                                     <View style={styles.footterContainer}>
-                                        <Text style={styles.footterText}>{`Created At: ${formatDate(project.createdAt).substring(0,10)}`}</Text>
-                                        <Text style={styles.footterTask}>5/11</Text>
+                                        <Text style={styles.footterText}>{`Created At: ${formatDate(project.createdAt).substring(0, 10)}`}</Text>
+                                        <ProgressBar 
+                                            style={styles.footterTaskProgress} 
+                                            progress={calculateMetrics(project).progress}
+                                            color='#004aad'
+                                        />
+                                        <Text style={styles.footterTaskText}>
+                                            {calculateMetrics(project).progressFormat}
+                                        </Text>
                                     </View>
                                 </View>
                             </Card>

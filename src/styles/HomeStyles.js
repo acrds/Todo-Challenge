@@ -61,16 +61,37 @@ export default styles = StyleSheet.create({
     descriptionContainer: {
         flexDirection: 'row',
         padding: 10,
-        height: 60
+        // height: 6
     },
     footterContainer: {
-        flex: 1,
+        // flex: 1,
         flexDirection: 'row',
         justifyContent: "space-between",
         paddingLeft: 10,
         paddingBottom: 5,
         paddingTop: 5,
-        paddingRight: 8
+        paddingRight: 8,
+    },
+    footterTaskProgress:{
+        // flex: 4,
+        marginHorizontal: 10,
+        // flexDirection: 'row',
+        height: '10',
+        width: 140,
+        borderRadius: 10,
+        backgroundColor: 'black'
+    },
+    footterText: {
+        // flex: 1,
+        fontWeight: 'bold', 
+        fontSize: 10,
+    },
+    footterTaskText:{
+        flex: 1,
+        fontWeight: 'bold', 
+        textAlign: 'center',
+        fontSize: 10,
+        paddingRight: 6,
     },
     itensHeader: {
         flexDirection: "column",
@@ -106,16 +127,6 @@ export default styles = StyleSheet.create({
     dialog: {
         textAlign: 'center',
     },
-    footterText: {
-        fontWeight: 'bold', 
-        fontSize: 10
-    },
-    footterTask:{
-        fontWeight: 'bold', 
-        fontSize: 14, 
-        paddingBottom: 8,
-        paddingRight: 8
-    },
     overlay: {
         position: 'absolute',
         top: 0,
@@ -125,5 +136,10 @@ export default styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    loadingText: {
+        color: '#004aad',
+        fontWeight: 'bold',
+        zIndex: 6,
     },
 });

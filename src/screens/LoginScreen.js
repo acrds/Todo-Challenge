@@ -28,7 +28,7 @@ export default function LoginScreen() {
             const response = await loginUser(data);
             const { token } = response;
             await saveToken(token);
-            navigation.replace("Projects");
+            navigation.replace("To Bee");
         } catch (error) {
             if (error.status === 400) {
                 alert("Fields are required");

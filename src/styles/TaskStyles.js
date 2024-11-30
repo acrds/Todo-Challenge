@@ -100,6 +100,17 @@ export default styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
+    fabGenerativa : {
+        position: 'absolute',
+        marginBottom: 85,
+        marginRight: 16,
+        right: 0,
+        bottom: 0,
+    },
+    inputModalGen: {
+        marginBottom: 18,
+        height: 70,
+    },
     modal: {
         backgroundColor: "white",
         padding: 20,
@@ -112,6 +123,7 @@ export default styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: 'center'
     },
+
     suggest: {
         margin: 0,
         padding: 0,
@@ -125,8 +137,10 @@ export default styles = StyleSheet.create({
     createButton: {
         marginTop: 20,
     },
-    generateButton: {
-        marginTop: 20,
+    generateTaskButton: {
+        marginTop: 10,
+        marginBottom: 20
+
     },
     containerButton: {
         display: 'flex',
@@ -140,6 +154,11 @@ export default styles = StyleSheet.create({
     boldText: {
         fontWeight: "bold",
     },
+    loadingText: {
+        color: '#004aad',
+        fontWeight: 'bold',
+        zIndex: 6,
+    },
     overlay: {
         position: 'absolute',
         top: 0,
@@ -148,6 +167,17 @@ export default styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    },
+    over2: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 5,
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
     },
 });

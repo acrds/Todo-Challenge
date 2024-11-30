@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, ScrollView } from 'react-native';
-import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Paragraph, Text } from 'react-native-paper';
+import { Card, FAB, SegmentedButtons, Title, Portal, Modal, TextInput, Button, useTheme, HelperText, ActivityIndicator, IconButton, Text } from 'react-native-paper';
 import styles from '../styles/TaskStyles';
-import { listTaskAproject, generateDescriptionNewTask, createTask } from '../services/routes';
+import { listTaskAproject, generateDescriptionNewTask, createTask, createTaskAI } from '../services/routes';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 
 export default function TaskScreen() {
@@ -12,9 +12,11 @@ export default function TaskScreen() {
     const { project } = route.params;
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingAI, setLoadingAI] = useState(false);
     const [selectedStatuses, setSelectedStatuses] = useState(['To Do', 'Doing', 'Done']);
     const [filteredTasks, setFilteredTasks] = useState(tasks);
     const [modalVisible, setModalVisible] = useState(false);
+    const [isVisibleModalAI, setIsVisibleModalAI] = useState(false);
     const [newTitle, setNewTitle] = useState("");
     const [newDescription, setNewDescription] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
@@ -68,6 +70,7 @@ export default function TaskScreen() {
     }, [newTitle]);
 
     var emptyTaskList = tasks?.length == 0;
+    var minimiunTaskList = tasks?.length > 1;
 
 
     const addNewTask = async () => {
@@ -98,10 +101,46 @@ export default function TaskScreen() {
             setModalVisible(false);
         }
     };
+    const generateTask = async () => {
+        try {
+            setLoadingAI(true);
+            const genNewTask = await createTaskAI({
+                projectId: project?.id
+            });
+            setNewTitle(`${genNewTask.name} - created by AI`)
+            setNewDescription(genNewTask.description)
+            alert("Propose task generated successfully");
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setLoadingAI(false);
+        }
+    };
+
+    const addTaskWithAi = async () => {
+        try {
+            setLoadingAI(true);
+            const newTask = {
+                name: newTitle,
+                description: newDescription,
+                projectId: project?.id
+            };
+            await createTask(newTask);
+            await getAllTasks();
+            alert("Task created with AI successfully");
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setLoadingAI(false);
+            setNewTitle('');
+            setNewDescription('');
+            setIsVisibleModalAI(false);
+        }
+    };
 
     const generateDescription = async () => {
         try {
-            setLoading(true);
+            setLoadingAI(true);
             if (newTitle.trim() && project?.id) {
                 const newTask = {
                     taskName: newTitle,
@@ -125,7 +164,7 @@ export default function TaskScreen() {
                 alert(error.message);
             }
         } finally {
-            setLoading(false);
+            setLoadingAI(false);
         }
     };
 
@@ -153,10 +192,10 @@ export default function TaskScreen() {
     return (
         <View style={styles.container}>
             {loading ? (
-                    <View style={styles.overlay}>
-                        <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} />
-                        <Text style={styles.loadingText}>Generating description...</Text>
-                    </View>
+                <View style={styles.overlay}>
+                    <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} />
+                    <Text style={styles.loadingText}>Loading...</Text>
+                </View>
             ) : (
                 <>
                     <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -213,7 +252,75 @@ export default function TaskScreen() {
                         color='white'
                         onPress={() => setModalVisible(true)}
                     />
+
+                    {minimiunTaskList &&
+                        <FAB
+                            style={[styles.fabGenerativa, { backgroundColor: '#004aad' }]}
+                            icon="robot"
+                            color='white'
+                            onPress={() => setIsVisibleModalAI(true)}
+                        />
+                    }
+
                     <Portal>
+                        {loadingAI &&
+                            <View style={styles.over2}>
+                                <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} hidesWhenStopped={loadingAI} />
+                                <Text style={styles.loadingText}>Generating with AI...</Text>
+                            </View>
+                        }
+                        <Modal visible={isVisibleModalAI} onDismiss={() => {
+                            setIsVisibleModalAI(false);
+                            setNewTitle('');
+                            setNewDescription('')
+                        }}
+                            contentContainerStyle={styles.modal}>
+                            <Title style={styles.modalTitle}>Generate New Task</Title>
+                            <Button icon='robot' disabled={newTitle !== ""} mode="contained" onPress={generateTask} style={[styles.generateTaskButton, { backgroundColor: newTitle !== "" ? theme.colors.disabled : "#004aad" }]}>
+                                Generate title and description
+                            </Button>
+                            <View>
+                                <TextInput
+                                    label="Task Title"
+                                    mode="outlined"
+                                    value={newTitle}
+                                    disabled={true}
+                                    style={styles.inputModalGen}
+                                    multiline
+                                />
+                            </View>
+                            <TextInput
+                                label="Task Description"
+                                mode="outlined"
+                                value={newDescription}
+                                disabled={true}
+                                style={styles.input}
+                                multiline
+                            />
+                            <View style={styles.containerButton}>
+                                <Button icon='trash-can' disabled={newTitle == ""} mode="contained" onPress={() => {
+                                    setIsVisibleModalAI(false);
+                                    setNewTitle('');
+                                    setNewDescription('');
+                                }}
+                                    style={[styles.createButton, { backgroundColor: newTitle == "" ? theme.colors.disabled : "#f14434" }]}>
+                                    Ignore
+                                </Button>
+                                <Button icon='robot' disabled={newTitle == ""} mode="contained" onPress={addTaskWithAi} style={[styles.createButton, { backgroundColor: newTitle == "" ? theme.colors.disabled : "#004aad" }]}>
+                                    Create AI
+                                </Button>
+
+                            </View>
+                        </Modal>
+                    </Portal>
+
+                    <Portal>
+                        {loadingAI &&
+                            <View style={styles.over2}>
+                                <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} hidesWhenStopped={loadingAI} />
+                                <Text style={styles.loadingText}>Generating with AI...</Text>
+                            </View>
+                        }
                         <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.modal}>
                             <Title style={styles.modalTitle}>Create New Task</Title>
                             <View>
@@ -238,7 +345,7 @@ export default function TaskScreen() {
                                 multiline
                             />
                             <View style={styles.containerButton}>
-                                <Button icon='robot' mode="contained" disabled={!hasTitle} onPress={generateDescription} style={[styles.generateButton, { backgroundColor: hasTitle ? "#1573ef" : theme.colors.disabled }]}>
+                                <Button icon='robot' mode="contained" disabled={!hasTitle} onPress={generateDescription} style={[styles.createButton, { backgroundColor: hasTitle ? "#1573ef" : theme.colors.disabled }]}>
                                     Generate with AI
                                 </Button>
                                 <Button mode="contained" disabled={!isFormValid} onPress={addNewTask} style={[styles.createButton, { backgroundColor: isFormValid ? "#004aad" : theme.colors.disabled }]}>

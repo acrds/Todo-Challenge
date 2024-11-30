@@ -141,6 +141,7 @@ export default styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 5,
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',    
     },
 });
