@@ -77,6 +77,7 @@ export default function RegisterScreen() {
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry={true}
+                        placeholder="Minimum 6 characters"
                         style={styles.input}
                     />
 
@@ -85,6 +86,7 @@ export default function RegisterScreen() {
                         mode="outlined"
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
+                        placeholder="Minimum 6 characters"
                         secureTextEntry={true}
                         style={styles.input}
                     />

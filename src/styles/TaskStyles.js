@@ -132,7 +132,8 @@ export default styles = StyleSheet.create({
     input: {
         marginBottom: 16,
         maxHeight: 150,
-        height: 140
+        height: 140,
+        marginTop: 10
     },
     createButton: {
         marginTop: 20,

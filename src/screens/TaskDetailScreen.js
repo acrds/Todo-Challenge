@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { createComment, deleteComment, listTaskAproject, updateComment, updateStatus, updateTask, deleteTask } from '../services/routes';
+import { createComment, deleteComment, listTaskAproject, updateComment, updateStatus, updateTask, deleteTask, createCommentWithAi } from '../services/routes';
 import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Dialog, Paragraph, ActivityIndicator, Icon } from "react-native-paper";
 import styles from '../styles/TaskDetailStyles';
 import Markdown from 'react-native-markdown-display';
@@ -106,7 +106,9 @@ export default function TaskDetailScreen() {
     const handleUpdateComment = async () => {
         try {
             setLoading(true);
-            await updateComment({ text: selectedComment }, selectedId);
+            const comment = await updateComment({ text: selectedComment }, selectedId);
+            setModalComment(false);
+            await createCommentWithAi(comment.comment.id);
             const fetchTask = await getAllTasks();
             setTask(fetchTask);
             alert('Comment updated successfully');
@@ -123,7 +125,6 @@ export default function TaskDetailScreen() {
         } finally {
             setSelectedComment("");
             setSelectedId("");
-            setModalComment(false);
             setLoading(false);
         }
     };
@@ -136,7 +137,9 @@ export default function TaskDetailScreen() {
                     taskId: task.id,
                     text: newComment,
                 };
-                await createComment(addComment);
+                const comment = await createComment(addComment);
+                setModalVisible(false);
+                await createCommentWithAi(comment.comment.id);
                 const fetchTask = await getAllTasks();
                 setTask(fetchTask);
                 alert("Comment created successfully");
@@ -154,7 +157,6 @@ export default function TaskDetailScreen() {
         } finally {
             setNewComment("");
             setLoading(false);
-            setModalVisible(false);
         }
     };
 
@@ -223,100 +225,105 @@ export default function TaskDetailScreen() {
                     <ActivityIndicator animating={true} size="large" style={styles.loadingIndicator} />
                     <Text style={styles.loadingText}>Loading...</Text>
                 </View>
-            ) : (
-                <ScrollView contentContainerStyle={styles.scrollContent}>
-                    <Title style={styles.titleTask}>{task.name}</Title>
-                    <View style={styles.cardHeader}>
-                        <View style={styles.containerHeaderLeft}>
-                            <View style={styles.viewButtons}>
-                                <Button
-                                    icon={"lead-pencil"}
-                                    mode="contained"
-                                    onPress={() => {
-                                        setModalEditTask(true);
-                                        setSelectedTitle(task.name);
-                                        setSelectedDescription(task.description);
-                                        setSelectedId(task.id);
-                                    }}
-                                    style={[{ backgroundColor: '#d4c3f1' }]}>Edit</Button>
-                                <Button
-                                    icon={"trash-can"}
-                                    mode="contained"
-                                    onPress={() => {
-                                        setModalDeleteTask(true);
-                                        setSelectedId(task.id);
-                                    }}
-                                    style={[{ backgroundColor: "#f14434" }]}>Remove</Button>
-                            </View>
-                            <Text style={styles.dates}>Created at: {formatDate(task.createdAt).substring(0, 10)}</Text>
-                            <Text style={styles.dates}>Updated at: {formatDate(task.updatedAt).substring(0, 10)}</Text>
-                            <Button icon="chevron-down" mode="contained" onPress={openMenu} >
-                                {task?.currentState?.state?.name}
-                            </Button>
-                            <Menu
-                                visible={visible}
-                                onDismiss={closeMenu}
-                                anchor={
-                                    <Button style={styles.status} onPress={openMenu} />
-                                }
-                            >
-                                {status.map((status) => (
-                                    <Menu.Item
-                                        key={status.id}
-                                        onPress={() => handleStatusChange(status.id)}
-                                        title={status.name}
-                                        disabled={status.id === task?.currentState?.state?.id}
-                                    />
-                                ))}
-                            </Menu>
+            ):(
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+                <Title style={styles.titleTask}>{task.name}</Title>
+                <View style={styles.cardHeader}>
+                    <View style={styles.containerHeaderLeft}>
+                        <View style={styles.viewButtons}>
+                            <Button
+                                icon={"lead-pencil"}
+                                mode="contained"
+                                onPress={() => {
+                                    setModalEditTask(true);
+                                    setSelectedTitle(task.name);
+                                    setSelectedDescription(task.description);
+                                    setSelectedId(task.id);
+                                }}
+                                style={[{ backgroundColor: '#d4c3f1' }]}>Edit</Button>
+                            <Button
+                                icon={"trash-can"}
+                                mode="contained"
+                                onPress={() => {
+                                    setModalDeleteTask(true);
+                                    setSelectedId(task.id);
+                                }}
+                                style={[{ backgroundColor: "#f14434" }]}>Remove</Button>
                         </View>
-                        <View style={styles.containerHeaderRight}>
-                            <Image
-                                source={require('../../assets/to-do-list.png')}
-                                style={styles.logo}
-                                resizeMode="contain"
-                            />
-                        </View>
-
+                        <Text style={styles.dates}>Created at: {formatDate(task.createdAt).substring(0, 10)}</Text>
+                        <Text style={styles.dates}>Updated at: {formatDate(task.updatedAt).substring(0, 10)}</Text>
+                        <Button icon="chevron-down" mode="contained" onPress={openMenu} >
+                            {task?.currentState?.state?.name}
+                        </Button>
+                        <Menu
+                            visible={visible}
+                            onDismiss={closeMenu}
+                            anchor={
+                                <Button style={styles.status} onPress={openMenu} />
+                            }
+                        >
+                            {status.map((status, index) => (
+                                <Menu.Item
+                                    key={status.id || index}
+                                    onPress={() => handleStatusChange(status.id)}
+                                    title={status.name}
+                                    disabled={status.id === task?.currentState?.state?.id}
+                                />
+                            ))}
+                        </Menu>
                     </View>
-                    <Card>
-                        <Text style={styles.subtitle}>Description:</Text>
-                        <Card.Content>
-                            <Markdown>
-                                {task.description}
-                            </Markdown>
-                        </Card.Content>
-                    </Card>
+                    <View style={styles.containerHeaderRight}>
+                        <Image
+                            source={require('../../assets/to-do-list.png')}
+                            style={styles.logo}
+                            resizeMode="contain"
+                        />
+                    </View>
 
-                    {emptyCommentList ? (
-                        <Text style={styles.noTextComment}>No comments yet for this task</Text>
-                    ) : (
-                        task.comments?.map(comment => (
-                            <Card key={comment.id} style={styles.card}>
+                </View>
+                <Card>
+                    <Text style={styles.subtitle}>Description:</Text>
+                    <Card.Content>
+                        <Markdown>
+                            {task.description}
+                        </Markdown>
+                    </Card.Content>
+                </Card>
+
+                {emptyCommentList ? (
+                    <Text style={styles.noTextComment}>No comments yet for this task</Text>
+                ) : (
+                    <>
+                        <Text style={styles.hasTextComments}>Comments:</Text>
+                        {task.comments?.map((comment, index) => (
+                            <Card key={comment.id || index} style={comment.user?.name == null ? styles.cardAI : styles.card}>
                                 <Card.Content>
                                     <View style={styles.modalCommentaries}>
                                         <Icon source="comment"
                                             color={'white'}
                                             size={18} />
-                                        <Paragraph style={styles.headerComment}>{`${formatDate(comment.updatedAt).substring(0, 16)} by ${comment.user?.name}`}</Paragraph>
+                                        <Paragraph style={styles.headerComment}>{comment.createdAt == comment.updatedAt ? `created at: ${formatDate(comment.createdAt).substring(0, 16)} by ${comment.user?.name == null ? 'To Bee App AI' : comment.user?.name}` : `updated at: ${formatDate(comment.updatedAt).substring(0, 16)} by ${comment.user?.name == null ? 'To Bee App AI' : comment.user?.name}`}</Paragraph>
                                     </View>
-                                    <Paragraph>{comment.text}</Paragraph>
-                                    <Card.Actions style={styles.commentModal}>
-                                        <Button onPress={() => {
-                                            setModalComment(true);
-                                            setSelectedComment(comment.text);
-                                            setSelectedId(comment.id);
-                                        }}>Edit</Button>
-                                        <Button onPress={() => {
-                                            setModalDeleteComment(true);
-                                            setSelectedId(comment.id);
-                                        }}>Remove</Button>
-                                    </Card.Actions>
+                                    <Paragraph style={styles.paragraphComment}>{comment.text}</Paragraph>
+                                    {(comment.user?.name != null) &&
+                                        <Card.Actions>
+                                            <Button style={styles.buttonComment} labelStyle={{ fontSize: 10, lineHeight: 10 }} onPress={() => {
+                                                setModalComment(true);
+                                                setSelectedComment(comment.text);
+                                                setSelectedId(comment.id);
+                                            }}>Edit</Button>
+                                            <Button style={styles.buttonComment} labelStyle={{ fontSize: 10, lineHeight: 10 }} onPress={() => {
+                                                setModalDeleteComment(true);
+                                                setSelectedId(comment.id);
+                                            }}>Remove</Button>
+                                        </Card.Actions>
+                                    }
                                 </Card.Content>
                             </Card>
-                        ))
-                    )}
-                </ScrollView>
+                        ))}
+                    </>
+                )}
+            </ScrollView>
             )}
             <FAB
                 icon="comment"

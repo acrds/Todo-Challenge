@@ -113,10 +113,8 @@ export const updateTask = async (data, taskId) => {
         params: data
       }
     );
-    console.log(response.data)
     return response.data;
   } catch (error) {
-    console.log(JSON.stringify(error))
     throw error;
   }
 };
@@ -135,6 +133,16 @@ export const deleteTask = async (taskId) => {
 export const createComment = async (data) => {
   try {
     const response = await api.post("comments", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//AI responds a comment
+export const createCommentWithAi = async (commentId) => {
+  try {
+    const response = await api.get(`comments/${commentId}/respond`);
     return response.data;
   } catch (error) {
     throw error;

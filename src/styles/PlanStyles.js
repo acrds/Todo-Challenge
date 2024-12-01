@@ -50,7 +50,7 @@ export default styles = StyleSheet.create({
         paddingBottom: 2
     },
     subtitle: {
-        textAlign: 'left',
+        textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 16,
         paddingHorizontal: 16,

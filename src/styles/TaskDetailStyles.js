@@ -5,12 +5,21 @@ export default styles = StyleSheet.create({
         marginTop: 50,
         alignSelf: "center",
     },
+    hasTextComments: {
+        textAlign: 'left',
+        fontWeight: 'bold',
+        paddingTop: 14, 
+        paddingHorizontal: 4,
+        fontStyle: 'italic', 
+        color: 'gray', 
+        fontSize: 12
+    },
     logo: {
         width: 150,
         height: 150,
         width: '100%',
-        textAlign: 'right', 
-        transform: [{ rotate: '20deg'}]
+        textAlign: 'right',
+        transform: [{ rotate: '20deg' }]
     },
     container: {
         flex: 1,
@@ -46,9 +55,13 @@ export default styles = StyleSheet.create({
         marginTop: 16,
         marginLeft: 40,
         borderRadius: 8,
-        elevation: 2,
-        backgroundColor: "#c2c2c2",
-        maxHeight: 150
+        backgroundColor: "#f0f0f0",
+    },
+    cardAI: {
+        marginTop: 16,
+        marginRight: 40,
+        borderRadius: 8,
+        backgroundColor: "#d7e4f2",
     },
     cardHeader: {
         flexDirection: "row",
@@ -97,7 +110,8 @@ export default styles = StyleSheet.create({
     },
     input: {
         marginBottom: 16,
-        maxHeight: 150
+        maxHeight: 150,
+        marginTop: 10
     },
     createButton: {
         marginTop: 20,
@@ -106,7 +120,7 @@ export default styles = StyleSheet.create({
         marginStart: 190,
     },
     headerComment: {
-        fontSize: 10,
+        fontSize: 8,
         paddingLeft: 4,
     },
     dialog: {
@@ -117,6 +131,15 @@ export default styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
         marginTop: 18
+    },
+    paragraphComment: {
+        fontSize: 10,
+        fontStyle: 'italic',
+    },
+    buttonComment: {
+        width: 90,
+        height: 30,
+        paddingVertical: 0,
     },
     desc: {
         fontSize: 12
@@ -132,7 +155,7 @@ export default styles = StyleSheet.create({
         margin: 6,
         paddingLeft: 4,
         color: "gray"
-    }, 
+    },
     overlay: {
         position: 'absolute',
         top: 0,
@@ -141,7 +164,41 @@ export default styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 5,
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',    
+        zIndex: 19,
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
     },
 });
+
+
+
+
+const addNewComment = async () => {
+    try {
+        setLoading(true);
+        if (newComment.trim() && task?.id) {
+            const addComment = {
+                taskId: task.id,
+                text: newComment,
+            };
+            const comment = await createComment(addComment);
+            setModalVisible(false);
+            await createCommentWithAi(comment.comment.id);
+            const fetchTask = await getAllTasks();
+            setTask(fetchTask);
+            alert("Comment created successfully");
+        }
+    } catch (error) {
+        if (error.status === 500) {
+            alert("Error. Try later");
+        } else if (error.status === 404) {
+            alert("User not found");
+        } else if (error.status === 400) {
+            alert("Fields are required");
+        } else {
+            alert(error.message);
+        }
+    } finally {
+        setNewComment("");
+        setLoading(false);
+    }
+};

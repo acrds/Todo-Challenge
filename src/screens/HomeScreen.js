@@ -4,12 +4,13 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { listProjects, createProject, deleteProject } from '../services/routes';
 import { Card, Title, FAB, IconButton, ActivityIndicator, Portal, Modal, TextInput, Button, useTheme, Dialog, Text, ProgressBar } from "react-native-paper";
 import styles from '../styles/HomeStyles';
+import { useProjectStore } from '../store/projectStore'; 
 
 export default function HomeScreen() {
     const navigation = useNavigation();
     const theme = useTheme();
-
     const [projects, setProjects] = useState([]);
+    const {setGlobalProject} = useProjectStore.getState();
     const [loading, setLoading] = useState(true);
     const [loadDelete, setLoadDelete] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,11 +23,11 @@ export default function HomeScreen() {
 
     useEffect(() => {
         setEmptyProjectList(projects?.length === 0);
-    }, [projects]);
+    }, [projects, emptyProjectList]);
 
     const fetchProject = async () => {
         const updatedProjects = await listProjects();
-        setTasks(updatedProjects);
+        setProjects(updatedProjects);
     };
     useFocusEffect(
         React.useCallback(() => {
@@ -39,6 +40,7 @@ export default function HomeScreen() {
             setLoading(true);
             const projectList = await listProjects();
             setProjects(projectList);
+            setGlobalProject(projectList);
         } catch (error) {
             alert("Error in load projects");
         } finally {
@@ -191,7 +193,7 @@ export default function HomeScreen() {
                                         <ProgressBar 
                                             style={styles.footterTaskProgress} 
                                             progress={calculateMetrics(project).progress}
-                                            color='#004aad'
+                                            color='#2482ff'
                                         />
                                         <Text style={styles.footterTaskText}>
                                             {calculateMetrics(project).progressFormat}

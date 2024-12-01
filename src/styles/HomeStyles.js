@@ -61,10 +61,8 @@ export default styles = StyleSheet.create({
     descriptionContainer: {
         flexDirection: 'row',
         padding: 10,
-        // height: 6
     },
     footterContainer: {
-        // flex: 1,
         flexDirection: 'row',
         justifyContent: "space-between",
         paddingLeft: 10,
@@ -73,16 +71,13 @@ export default styles = StyleSheet.create({
         paddingRight: 8,
     },
     footterTaskProgress:{
-        // flex: 4,
         marginHorizontal: 10,
-        // flexDirection: 'row',
         height: '10',
         width: 140,
         borderRadius: 10,
         backgroundColor: 'black'
     },
     footterText: {
-        // flex: 1,
         fontWeight: 'bold', 
         fontSize: 10,
     },
@@ -119,7 +114,8 @@ export default styles = StyleSheet.create({
     },
     input: {
         marginBottom: 16,
-        height: 140
+        height: 140, 
+        marginTop: 10
     },
     createButton: {
         marginTop: 20,
