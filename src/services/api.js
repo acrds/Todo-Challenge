@@ -3,6 +3,7 @@ import {getToken} from "../utils/tokenStorage";
 import { useAIStore } from "../store/aiStore";
 
 const api = axios.create({
+  //I created a domain to host the backend. But if you want to run it locally, you can change it to expo server port
   baseURL: "https://tobeeapp.tanooki.cloud/api/", 
   timeout: 9000, 
   headers: {
