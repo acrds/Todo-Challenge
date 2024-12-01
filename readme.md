@@ -116,7 +116,7 @@ The core logic of the app is housed in the src folder. It contains the following
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/221b90c8-2214-4621-aefc-e8f09d83d95a">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/91baffc8-acd9-482d-894d-c9404267e5e7">
 
-The application opens on the Login screen, requesting user authentication, or giving the option to register, if this is the first time you access it. Registration requests information such as name, email and password, which must be at least 6 characters long.
+- The application opens on the Login screen, requesting user authentication, or giving the option to register, if this is the first time you access it. Registration requests information such as name, email and password, which must be at least 6 characters long.
 
 ### App - First Access
 
@@ -124,7 +124,7 @@ The application opens on the Login screen, requesting user authentication, or gi
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/091db874-c180-49ef-aa40-fdd5a7ec688a">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/3f9a96ba-4071-410b-ba02-a1527c71715b">
 
-When accessing the application for the first time, the screen opens on the projects screen, with a navigation button that allows the user to navigate between the project screens, action plans, based on the projects and tasks created, and finally, the application preferences screen where the user can define which generative AI they want to be used in the functionalities. By default, the generative AI set is IBM Watson.
+- When accessing the application for the first time, the screen opens on the projects screen, with a navigation button that allows the user to navigate between the project screens, action plans, based on the projects and tasks created, and finally, the application preferences screen where the user can define which generative AI they want to be used in the functionalities. By default, the generative AI set is IBM Watson.
 
 ### Home 
 
@@ -132,27 +132,27 @@ When accessing the application for the first time, the screen opens on the proje
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/3ef40e4b-4b8c-4b6f-911c-e8b800fac216">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/d6cbcb07-0ee0-4199-9143-31037dc8916c">
 
-On the projects screen, when the user clicks on the create component, they enter the name and description of the project they want to create. When creating, it shows the basic information about that project such as the title, description, creation date, a progress bar showing how many tasks that project has and how many have already been completed. In addition to the option to delete a project. 
+- On the projects screen, when the user clicks on the create component, they enter the name and description of the project they want to create. When creating, it shows the basic information about that project such as the title, description, creation date, a progress bar showing how many tasks that project has and how many have already been completed. In addition to the option to delete a project. 
 
 ### Task
 
-When clicking on the created project, it takes the user to the tasks screen where all the tasks created for that project will be listed, in addition to the option to filter the tasks based on their status. This filter is a multiselect, which allows the user to select more than one filter.
+- When clicking on the created project, it takes the user to the tasks screen where all the tasks created for that project will be listed, in addition to the option to filter the tasks based on their status. This filter is a multiselect, which allows the user to select more than one filter.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/24984811-4487-4c1a-802b-64d48b6fbfe0">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/e7364868-03be-4368-ab77-ce6f302c2431">
 
-When clicking on the create task component, the user must enter a title and description for the task. Here, it is possible to already have the help of generative AI, where when entering the task title, the button to generate description with AI is enabled.
+- When clicking on the create task component, the user must enter a title and description for the task. Here, it is possible to already have the help of generative AI, where when entering the task title, the button to generate description with AI is enabled.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/6fd10496-d8a1-4d84-a9af-a6c2e837020b">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/464cd07c-a4d1-4b0b-b830-751417c0e1bf">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/b63ab0b6-496c-422a-ae1a-7a553452811b">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/e52acb22-9674-40df-8756-a5b6960e0649">
 
-From this point on the user can just ignore the option to generate the description with generative AI and create their own description or not. The description created by generative AI will come in a markdown format, but the application has a library in its dependencies that interprets this format.
+- From this point on the user can just ignore the option to generate the description with generative AI and create their own description or not. The description created by generative AI will come in a markdown format, but the application has a library in its dependencies that interprets this format.
 
-The created task displays basic information such as current status, task title and the number of comments that task has.
+- The created task displays basic information such as current status, task title and the number of comments that task has.
 
-From two created tasks, the application provides a new component to create a task 100% using generative AI. This functionality provides a title and description suggestion based on the project and previous tasks. This suggestion can be accepted or ignored by the user.
+- From two created tasks, the application provides a new component to create a task 100% using generative AI. This functionality provides a title and description suggestion based on the project and previous tasks. This suggestion can be accepted or ignored by the user.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/5f843f86-3658-4d8a-831c-2e0c65f53361">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/6a11ac64-1987-40ce-b8f4-a2bead8768d6">
@@ -162,46 +162,44 @@ From two created tasks, the application provides a new component to create a tas
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/383a7092-3473-4d9f-ac52-cf75a336e438">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/e67dbac8-5c8f-4a5a-8abb-17c3692b380b">
 
-By clicking on a task, the user has access to information about the title, current status, description, creation date, and modification of the task. Another option available is to add comments to the task. Each comment created can be edited or deleted by the user. In addition, for each comment made, the generative AI makes a comment regarding the comment entered.
+- By clicking on a task, the user has access to information about the title, current status, description, creation date, and modification of the task. Another option available is to add comments to the task. Each comment created can be edited or deleted by the user. In addition, for each comment made, the generative AI makes a comment regarding the comment entered.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/76d9402b-2c75-4c67-9a06-b55d3faa2bfa">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/264a41c9-ff6c-4a03-a438-e4e06f4c4560">
 
-If a comment is edited, the generative AI creates a new comment.
+- If a comment is edited, the generative AI creates a new comment.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/7c503e72-4880-455f-8bf4-e927bcb63b74">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/998a55d0-acc2-4218-b547-79dce0ae4e56">
 
-The task can also be edited or deleted.
+- The task can also be edited or deleted.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/f681fa6d-261f-46a1-ba19-b750a058a22f">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/face645a-7c2d-4945-aa84-9ccf857bfb93">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/6960f6a7-66b0-4f97-b98e-f08300253036">
 
-Also on this screen, you can change the task status, changing between to do, doing and done status.
+- Also on this screen, you can change the task status, changing between to do, doing and done status.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/2195bdf4-e874-406b-a8d4-45d6a384e4ac">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/bd0691e3-d433-415a-856b-c90353387e1a">
 
-Each status update is reflected directly on the Task screen, where to help with visualization, each status has a unique color. Also note that the `Foods` task shows that it has 3 comments.
+- Each status update is reflected directly on the Task screen, where to help with visualization, each status has a unique color. Also note that the `Foods` task shows that it has 3 comments.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/7a93a52e-fb16-45ee-a421-276e10d348fb">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/c3e88207-8416-4fa8-ab7a-081659f3a920">
 
-Furthermore, as the Christmas dinner project has a task with the status done, the progress bar on the Home screen reflects the user's progress.
+- Furthermore, as the Christmas dinner project has a task with the status done, the progress bar on the Home screen reflects the user's progress.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/d375ce3a-b6fc-4503-b831-208b98f168e1">
 
 ### Plan
 
-After creating a project, the Plan tab now offers the function of suggesting a personalized plan to the user, based on a prompt that will determine a plan with 1 or a maximum of 3 tasks for a specific project.
-
-That is why a project must have at least one task for this functionality to generate a plan proposal.
+- After creating a project, the Plan tab now offers the function of suggesting a personalized plan to the user, based on a prompt that will determine a plan with 1 or a maximum of 3 tasks for a specific project. That is why a project must have at least one task for this functionality to generate a plan proposal.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/79767716-31ea-4fff-8a9c-f709bc55a364">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/25eec274-e520-4c36-8a3e-d29d464b71e1">
 
-If there are tasks, the user will have a proposed action plan based on the selected project. As in the example, only 3 tasks were created, and the plan recommended carrying out all of them. However, if there were more tasks in the Christmas dinner project, the generative AI would suggest the tasks according to a classification performed through a command prompt in the API.
+- If there are tasks, the user will have a proposed action plan based on the selected project. As in the example, only 3 tasks were created, and the plan recommended carrying out all of them. However, if there were more tasks in the Christmas dinner project, the generative AI would suggest the tasks according to a classification performed through a command prompt in the API.
 
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/76f0d55c-f04e-4e87-9965-45f047cf1a39">
 <img width="223" alt="image" src="https://github.com/user-attachments/assets/13d2de8f-68be-4098-8b62-7ecf9faee2bf">
