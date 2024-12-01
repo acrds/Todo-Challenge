@@ -5,6 +5,7 @@ import { Button, useTheme, TextInput, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from '../services/routes';
 import { saveToken } from "../utils/tokenStorage";
+import { CommonActions } from '@react-navigation/native';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
@@ -29,6 +30,13 @@ export default function LoginScreen() {
             const { token } = response;
             await saveToken(token);
             navigation.replace("To Bee");
+            navigation.dispatch(CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'To Bee' }
+                ]
+            })
+        );
         } catch (error) {
             if (error.status === 400) {
                 alert("Fields are required");

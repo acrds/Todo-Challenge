@@ -5,7 +5,6 @@ import { createComment, deleteComment, listTaskAproject, updateComment, updateSt
 import { Card, Title, Text, FAB, Menu, Portal, Modal, TextInput, Button, useTheme, Dialog, Paragraph, ActivityIndicator, Icon } from "react-native-paper";
 import styles from '../styles/TaskDetailStyles';
 import Markdown from 'react-native-markdown-display';
-import { CommonActions } from '@react-navigation/native';
 
 export default function TaskDetailScreen() {
     const theme = useTheme();

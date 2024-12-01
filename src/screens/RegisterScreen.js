@@ -4,6 +4,7 @@ import { TextInput, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../services/routes";
 import styles from '../styles/RegisterStyles';
+import { CommonActions } from '@react-navigation/native';
 
 export default function RegisterScreen() {
     const theme = useTheme();
@@ -31,7 +32,13 @@ export default function RegisterScreen() {
                 const data = { name, email, password };
                 await registerUser(data);
                 alert("Register Successfully");
-                navigation.navigate("Login");
+                navigation.dispatch(CommonActions.reset({
+                    index: 0,
+                    routes: [
+                        { name: 'Login' }
+                    ]
+                })
+            );
             } catch (error) {
                 alert("Error to register. Try again.");
             }
