@@ -85,7 +85,7 @@ export default styles = StyleSheet.create({
         flex: 1,
         fontWeight: 'bold', 
         textAlign: 'center',
-        fontSize: 10,
+        fontSize: 9,
         paddingRight: 6,
     },
     itensHeader: {

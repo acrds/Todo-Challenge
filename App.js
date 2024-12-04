@@ -32,7 +32,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Task" component={TaskScreen} />
-        <Stack.Screen name="Task Detail" component={TaskDetailScreen} />
+        <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
